@@ -39,12 +39,17 @@ entity detect_impulsion is
 end detect_impulsion;
 
 architecture Behavioral of detect_impulsion is
-
+    signal  prev_state : std_logic := '0';
 begin
     process (clk)
     begin
         if (clk'event and clk = '1') then
-            data_out <= data_in;
+            if (data_in = not(prev_state)) then
+                data_out <= data_in;
+            else
+                data_out <= '0';
+            end if;
+            prev_state <= data_in;
         end if;
     end process;
 
