@@ -24,7 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -32,12 +32,36 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity cpt_1_9 is
---  Port ( );
+    Port (  clk     : in    std_logic;
+            reset   : in    std_logic;
+            inc     : in    std_logic;
+            dec     : in    std_logic;
+            value   : out   std_logic_vector(3 downto 0)
+            );
 end cpt_1_9;
 
 architecture Behavioral of cpt_1_9 is
-
+    signal counter  : unsigned  (3 downto 0);
 begin
-
-
+    process(clk, reset)
+    begin
+        if (reset = '1') then
+            counter  <= (OTHERS=> '0');
+        elsif (clk'event and clk = '1') then
+            if (inc = '1') then
+                if (counter = to_unsigned(9, 4)) then
+                    counter <= counter;
+                else
+                    counter <= counter + 1;
+                end if;
+            elsif (dec = '1') then
+                if (counter = to_unsigned(0, 4)) then
+                    counter <= counter;
+                else
+                    counter <= counter - 1;
+                end if;
+            end if;
+        end if;
+    end process;
+    value <= std_logic_vector(counter);
 end Behavioral;
