@@ -54,14 +54,14 @@ begin
             ceP_couter      <= (OTHERS=> '0');
             cePerception    <= '0';
         elsif (clk'event and clk = '1') then
-            if (ceA_couter = 33333) then    -- (33 334 - 1)
+            if (ceA_couter = 9999999) then    -- (10 000 000 - 1)
                 ceA_couter  <= (OTHERS=> '0');
                 ceAffichage <= '1';
             else
                 ceA_couter  <= ceA_couter + 1;
                 ceAffichage <= '0';
             end if;
-                if (ceP_couter = 9999999) then   -- (10 000 000 - 1)
+                if (ceP_couter = 33333) then   -- (33 334 - 1)
                 ceP_couter      <= (OTHERS=> '0');
                 cePerception    <= '1';
             else
