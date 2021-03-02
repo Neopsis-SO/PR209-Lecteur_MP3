@@ -32,12 +32,20 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity detect_impulsion is
---  Port ( );
+    Port (  clk         : in    std_logic;
+            data_in     : in    std_logic;
+            data_out    : out   std_logic
+            );
 end detect_impulsion;
 
 architecture Behavioral of detect_impulsion is
 
 begin
-
+    process (clk)
+    begin
+        if (clk'event and clk = '1') then
+            data_out <= data_in;
+        end if;
+    end process;
 
 end Behavioral;
