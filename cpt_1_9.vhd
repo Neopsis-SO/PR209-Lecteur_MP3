@@ -46,7 +46,7 @@ begin
     process(clk, reset)
     begin
         if (reset = '1') then
-            counter  <= (OTHERS=> '0');
+            counter  <= to_unsigned(1, 4);
         elsif (clk'event and clk = '1') then
             if (inc = '1') then
                 if (counter = to_unsigned(9, 4)) then
@@ -55,7 +55,7 @@ begin
                     counter <= counter + 1;
                 end if;
             elsif (dec = '1') then
-                if (counter = to_unsigned(0, 4)) then
+                if (counter = to_unsigned(1, 4)) then
                     counter <= counter;
                 else
                     counter <= counter - 1;
