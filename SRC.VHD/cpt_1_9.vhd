@@ -48,17 +48,17 @@ begin
         if (reset = '1') then
             counter  <= to_unsigned(1, 4);
         elsif (clk'event and clk = '1') then
-            if (inc = '1') then
-                if (counter = to_unsigned(9, 4)) then
-                    counter <= counter;
-                else
-                    counter <= counter + 1;
-                end if;
-            elsif (dec = '1') then
+            if (dec = '1') then
                 if (counter = to_unsigned(1, 4)) then
                     counter <= counter;
                 else
                     counter <= counter - 1;
+                end if;
+            elsif (inc = '1') then
+                if (counter = to_unsigned(9, 4)) then
+                    counter <= counter;
+                else
+                    counter <= counter + 1;
                 end if;
             end if;
         end if;
