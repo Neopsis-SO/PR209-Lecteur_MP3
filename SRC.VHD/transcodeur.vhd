@@ -24,7 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -39,7 +39,7 @@ entity transcodeur is
             nbCpt1_599  : in    std_logic_vector(9 downto 0);
             S_ms        : out   std_logic_vector(6 downto 0);
             S_s         : out   std_logic_vector(6 downto 0);
-            S_dz        : out   std_logic_vector(6 downto 0);
+            S_ds        : out   std_logic_vector(6 downto 0);
             S_vol       : out   std_logic_vector(6 downto 0);
             S_fsm_0     : out   std_logic_vector(6 downto 0);
             S_fsm_1     : out   std_logic_vector(6 downto 0);
@@ -64,9 +64,9 @@ architecture Behavioral of transcodeur is
     signal digit8       : std_logic_vector(6 downto 0) := "0000000";    -- "8"
     signal digit9       : std_logic_vector(6 downto 0) := "0010000";    -- "9"
     
-    signal mseconde     : std_logic_vector(3 downto 0) := (OTHERS=> '0');
-    signal seconde      : std_logic_vector(3 downto 0) := (OTHERS=> '0');
-    signal dizaine      : std_logic_vector(3 downto 0) := (OTHERS=> '0');
+    signal unit         : unsigned (3 downto 0) := (OTHERS=> '0');
+    signal dizaine      : unsigned (3 downto 0) := (OTHERS=> '0');
+    signal centaine     : unsigned (3 downto 0) := (OTHERS=> '0');
     
 begin
     Aff_fsm_state : process(play_pause, restart, forward)
@@ -117,16 +117,36 @@ begin
     
 --------------------------------------------------------------------
 
-    Separation_cpt_1_599 : process(nbCpt1_599)
+    Separation_cpt_1_599 : process(nbCpt1_599) -- separer en 2 process celui ci pour calculer centaine, dizaine, unite
     begin
-    
+        if (unsigned(nbCpt1_599) < to_unsigned(100, 10)) then
+            centaine <= to_unsigned(0, 10);
+            if (unsigned(nbCpt1_599) < to_unsigned(10, 10)) then
+                dizaine <= to_unsigned(0, 10);
+                case unsigned(nbCpt1_599) is
+                    when "0000" => unit <= to_unsigned(0, 3);
+                    when "0001" => unit <= to_unsigned(1, 3);
+                    when "0010" => unit <= to_unsigned(2, 3);
+                    when "0011" => unit <= to_unsigned(3, 3);
+                    when "0100" => unit <= to_unsigned(4, 3);
+                    when "0101" => unit <= to_unsigned(5, 3);
+                    when "0110" => unit <= to_unsigned(6, 3);
+                    when "0111" => unit <= to_unsigned(7, 3);
+                    when "1000" => unit <= to_unsigned(8, 3);
+                    when "1001" => unit <= to_unsigned(9, 3);
+                    when OTHERS => unit <= "1111";  --hyphen
+                end case;
+            elsif (unsigned(nbCpt1_599) < to_unsigned(20, 10)) then
+                dizaine <= to_unsigned(1, 10);
+            end if;
+        end if;
     end process;
 
 --------------------------------------------------------------------
 
-    Aff_cpt_1_599 : process(mseconde, seconde, dizaine)
+    Aff_cpt_1_599 : process(unit, dizaine, centaine)
     begin
-        case mseconde is
+        case unit is
             when "0000" => S_ms <= digit0;
             when "0001" => S_ms <= digit1;
             when "0010" => S_ms <= digit2;
@@ -137,10 +157,10 @@ begin
             when "0111" => S_ms <= digit7;
             when "1000" => S_ms <= digit8;
             when "1001" => S_ms <= digit9;
-            when OTHERS => S_ms <= digit0;
+            when OTHERS => S_ms <= hyphen;
         end case;
         
-        case seconde is
+        case dizaine is
             when "0000" => S_s <= digit0;
             when "0001" => S_s <= digit1;
             when "0010" => S_s <= digit2;
@@ -151,21 +171,21 @@ begin
             when "0111" => S_s <= digit7;
             when "1000" => S_s <= digit8;
             when "1001" => S_s <= digit9;
-            when OTHERS => S_s <= digit0;
+            when OTHERS => S_s <= hyphen;
         end case;
         
-        case dizaine is
-            when "0000" => S_dz <= digit0;
-            when "0001" => S_dz <= digit1;
-            when "0010" => S_dz <= digit2;
-            when "0011" => S_dz <= digit3;
-            when "0100" => S_dz <= digit4;
-            when "0101" => S_dz <= digit5;
-            when "0110" => S_dz <= digit6;
-            when "0111" => S_dz <= digit7;
-            when "1000" => S_dz <= digit8;
-            when "1001" => S_dz <= digit9;
-            when OTHERS => S_dz <= digit0;
+        case centaine is
+            when "0000" => S_ds <= digit0;
+            when "0001" => S_ds <= digit1;
+            when "0010" => S_ds <= digit2;
+            when "0011" => S_ds <= digit3;
+            when "0100" => S_ds <= digit4;
+            when "0101" => S_ds <= digit5;
+            when "0110" => S_ds <= digit6;
+            when "0111" => S_ds <= digit7;
+            when "1000" => S_ds <= digit8;
+            when "1001" => S_ds <= digit9;
+            when OTHERS => S_ds <= hyphen;
         end case;
     end process;
     
