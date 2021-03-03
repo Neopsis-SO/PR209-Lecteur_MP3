@@ -98,7 +98,7 @@ begin
             
             when Etat_Stop => 
                 if (b_center = '1') then
-                    nx_state <= Etat_Pause;
+                    nx_state <= Etat_Play_Fwd;
                 else
                     nx_state <= Etat_Stop;
                 end if;
