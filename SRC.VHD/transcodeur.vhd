@@ -120,24 +120,24 @@ begin
     Separation_cpt_1_599 : process(nbCpt1_599) -- separer en 2 process celui ci pour calculer centaine, dizaine, unite
     begin
         if (unsigned(nbCpt1_599) < to_unsigned(100, 10)) then
-            centaine <= to_unsigned(0, 10);
+            centaine <= to_unsigned(0, 4);
             if (unsigned(nbCpt1_599) < to_unsigned(10, 10)) then
-                dizaine <= to_unsigned(0, 10);
+                dizaine <= to_unsigned(0, 4);
                 case unsigned(nbCpt1_599) is
-                    when "0000" => unit <= to_unsigned(0, 3);
-                    when "0001" => unit <= to_unsigned(1, 3);
-                    when "0010" => unit <= to_unsigned(2, 3);
-                    when "0011" => unit <= to_unsigned(3, 3);
-                    when "0100" => unit <= to_unsigned(4, 3);
-                    when "0101" => unit <= to_unsigned(5, 3);
-                    when "0110" => unit <= to_unsigned(6, 3);
-                    when "0111" => unit <= to_unsigned(7, 3);
-                    when "1000" => unit <= to_unsigned(8, 3);
-                    when "1001" => unit <= to_unsigned(9, 3);
+                    when "0000" => unit <= to_unsigned(0, 4);
+                    when "0001" => unit <= to_unsigned(1, 4);
+                    when "0010" => unit <= to_unsigned(2, 4);
+                    when "0011" => unit <= to_unsigned(3, 4);
+                    when "0100" => unit <= to_unsigned(4, 4);
+                    when "0101" => unit <= to_unsigned(5, 4);
+                    when "0110" => unit <= to_unsigned(6, 4);
+                    when "0111" => unit <= to_unsigned(7, 4);
+                    when "1000" => unit <= to_unsigned(8, 4);
+                    when "1001" => unit <= to_unsigned(9, 4);
                     when OTHERS => unit <= "1111";  --hyphen
                 end case;
             elsif (unsigned(nbCpt1_599) < to_unsigned(20, 10)) then
-                dizaine <= to_unsigned(1, 10);
+                dizaine <= to_unsigned(1, 4);
             end if;
         end if;
     end process;
