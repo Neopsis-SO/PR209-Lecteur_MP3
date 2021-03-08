@@ -137,6 +137,7 @@ architecture Behavioral of gestion_MP3 is
             );
     end component;
     
+    signal RESET_BARRE      : STD_LOGIC;
     signal B_UP             : STD_LOGIC;
     signal B_DOWN           : STD_LOGIC;
     signal B_LEFT           : STD_LOGIC;
@@ -162,6 +163,9 @@ architecture Behavioral of gestion_MP3 is
     signal E7               : STD_LOGIC_VECTOR(6 downto 0);
     
 begin
+
+    RESET_BARRE <= not(reset);
+    
     REG_B_CENTER : detect_impulsion 
         PORT MAP (  CLK100MHZ,
                     BTNC,
@@ -194,7 +198,7 @@ begin
 
     FSM : fsm_MP3
         PORT MAP (  CLK100MHZ,
-                    reset,
+                    RESET_BARRE,
                     B_UP,
                     B_DOWN,
                     B_CENTER,
@@ -209,14 +213,14 @@ begin
                     
     GESTION_F : gestion_freq
         PORT MAP (  CLK100MHZ,
-                    reset,
+                    RESET_BARRE,
                     CE_AFFICHAGE,
                     CE_PERCEPTION
                     );
 
     GESTION_SON : cpt_1_9
         PORT MAP (  CLK100MHZ,
-                    reset,
+                    RESET_BARRE,
                     VOLUME_UP,
                     VOLUME_DOWN,
                     NB_SON
@@ -224,7 +228,7 @@ begin
 
     GESTION_TEMP : cpt_1_599
         PORT MAP (  CLK100MHZ,
-                    reset,
+                    RESET_BARRE,
                     CE_AFFICHAGE,
                     RESTART,
                     PLAY_PAUSE,
@@ -250,7 +254,7 @@ begin
 
     SELECT_7_SEGMENT : mod8
         PORT MAP (  CLK100MHZ,
-                    reset,
+                    RESET_BARRE,
                     CE_PERCEPTION,
                     AN,
                     COMMANDE
