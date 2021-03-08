@@ -50,19 +50,19 @@ end transcodeur;
 
 architecture Behavioral of transcodeur is
     -- Cathodes des 7 segments "GFEDCBA" (activation a l etat bas)
-    signal hyphen       : std_logic_vector(6 downto 0) := "0111111";    --"-"
-    signal arrow_left   : std_logic_vector(6 downto 0) := "1000110";    --"["
-    signal arrow_right  : std_logic_vector(6 downto 0) := "1110000";    --"]"
-    signal digit0       : std_logic_vector(6 downto 0) := "1000000";    -- "0" 
-    signal digit1       : std_logic_vector(6 downto 0) := "1111001";    -- "1"
-    signal digit2       : std_logic_vector(6 downto 0) := "0100100";    -- "2"
-    signal digit3       : std_logic_vector(6 downto 0) := "0110000";    -- "3"
-    signal digit4       : std_logic_vector(6 downto 0) := "0011001";    -- "4"
-    signal digit5       : std_logic_vector(6 downto 0) := "0010010";    -- "5"
-    signal digit6       : std_logic_vector(6 downto 0) := "0000010";    -- "6"
-    signal digit7       : std_logic_vector(6 downto 0) := "1111000";    -- "7"
-    signal digit8       : std_logic_vector(6 downto 0) := "0000000";    -- "8"
-    signal digit9       : std_logic_vector(6 downto 0) := "0010000";    -- "9"
+    constant hyphen       : std_logic_vector(6 downto 0) := "0111111";    --"-"
+    constant arrow_left   : std_logic_vector(6 downto 0) := "1000110";    --"["
+    constant arrow_right  : std_logic_vector(6 downto 0) := "1110000";    --"]"
+    constant digit0       : std_logic_vector(6 downto 0) := "1000000";    -- "0" 
+    constant digit1       : std_logic_vector(6 downto 0) := "1111001";    -- "1"
+    constant digit2       : std_logic_vector(6 downto 0) := "0100100";    -- "2"
+    constant digit3       : std_logic_vector(6 downto 0) := "0110000";    -- "3"
+    constant digit4       : std_logic_vector(6 downto 0) := "0011001";    -- "4"
+    constant digit5       : std_logic_vector(6 downto 0) := "0010010";    -- "5"
+    constant digit6       : std_logic_vector(6 downto 0) := "0000010";    -- "6"
+    constant digit7       : std_logic_vector(6 downto 0) := "1111000";    -- "7"
+    constant digit8       : std_logic_vector(6 downto 0) := "0000000";    -- "8"
+    constant digit9       : std_logic_vector(6 downto 0) := "0010000";    -- "9"
     
     signal unit         : unsigned (3 downto 0) := (OTHERS=> '0');
     signal dizaine      : unsigned (3 downto 0) := (OTHERS=> '0');
