@@ -80,6 +80,7 @@ architecture Behavioral of gestion_MP3 is
     component cpt_1_9
         Port (  clk     : in    std_logic;
             reset   : in    std_logic;
+            restart : in    std_logic;
             inc     : in    std_logic;
             dec     : in    std_logic;
             value   : out   std_logic_vector(3 downto 0)
@@ -221,6 +222,7 @@ begin
     GESTION_SON : cpt_1_9
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
+                    RESTART,
                     VOLUME_UP,
                     VOLUME_DOWN,
                     NB_SON
