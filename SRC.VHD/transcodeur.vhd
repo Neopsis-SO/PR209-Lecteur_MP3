@@ -64,6 +64,8 @@ architecture Behavioral of transcodeur is
     constant digit8       : std_logic_vector(6 downto 0) := "0000000";    -- "8"
     constant digit9       : std_logic_vector(6 downto 0) := "0010000";    -- "9"
     
+    signal couter_tempC : unsigned (9 downto 0) := (OTHERS=> '0');
+    signal couter_tempD : unsigned (9 downto 0) := (OTHERS=> '0');
     signal unit         : unsigned (3 downto 0) := (OTHERS=> '0');
     signal dizaine      : unsigned (3 downto 0) := (OTHERS=> '0');
     signal centaine     : unsigned (3 downto 0) := (OTHERS=> '0');
@@ -116,30 +118,100 @@ begin
     end process;
     
 --------------------------------------------------------------------
-
-    Separation_cpt_1_599 : process(nbCpt1_599) -- separer en 2 process celui ci pour calculer centaine, dizaine, unite
+    
+    Separation_cpt_1_599_centaine : process(nbCpt1_599) -- separer en 2 process celui ci pour calculer centaine, dizaine, unite
     begin
+        centaine        <= to_unsigned(0, 4);
+        couter_tempC    <= unsigned(nbCpt1_599);
         if (unsigned(nbCpt1_599) < to_unsigned(100, 10)) then
-            centaine <= to_unsigned(0, 4);
-            if (unsigned(nbCpt1_599) < to_unsigned(10, 10)) then
-                dizaine <= to_unsigned(0, 4);
-                case unsigned(nbCpt1_599) is
-                    when "0000" => unit <= to_unsigned(0, 4);
-                    when "0001" => unit <= to_unsigned(1, 4);
-                    when "0010" => unit <= to_unsigned(2, 4);
-                    when "0011" => unit <= to_unsigned(3, 4);
-                    when "0100" => unit <= to_unsigned(4, 4);
-                    when "0101" => unit <= to_unsigned(5, 4);
-                    when "0110" => unit <= to_unsigned(6, 4);
-                    when "0111" => unit <= to_unsigned(7, 4);
-                    when "1000" => unit <= to_unsigned(8, 4);
-                    when "1001" => unit <= to_unsigned(9, 4);
-                    when OTHERS => unit <= "1111";  --hyphen
-                end case;
-            elsif (unsigned(nbCpt1_599) < to_unsigned(20, 10)) then
-                dizaine <= to_unsigned(1, 4);
-            end if;
+            centaine        <= to_unsigned(0, 4);
+            couter_tempC    <= unsigned(nbCpt1_599);
+        elsif (unsigned(nbCpt1_599) < to_unsigned(200, 10)) then
+            centaine        <= to_unsigned(1, 4);
+            couter_tempC    <= unsigned(nbCpt1_599) - to_unsigned(100, 10);
+        elsif (unsigned(nbCpt1_599) < to_unsigned(300, 10)) then
+            centaine        <= to_unsigned(2, 4);
+            couter_tempC    <= unsigned(nbCpt1_599) - to_unsigned(200, 10);
+        elsif (unsigned(nbCpt1_599) < to_unsigned(400, 10)) then
+            centaine        <= to_unsigned(3, 4);
+            couter_tempC    <= unsigned(nbCpt1_599) - to_unsigned(300, 10);
+        elsif (unsigned(nbCpt1_599) < to_unsigned(500, 10)) then
+            centaine        <= to_unsigned(4, 4);
+            couter_tempC    <= unsigned(nbCpt1_599) - to_unsigned(400, 10);
+        elsif (unsigned(nbCpt1_599) < to_unsigned(600, 10)) then
+            centaine        <= to_unsigned(5, 4);
+            couter_tempC    <= unsigned(nbCpt1_599) - to_unsigned(500, 10);
+        elsif (unsigned(nbCpt1_599) < to_unsigned(700, 10)) then
+            centaine        <= to_unsigned(6, 4);
+            couter_tempC    <= unsigned(nbCpt1_599) - to_unsigned(600, 10);
+        elsif (unsigned(nbCpt1_599) < to_unsigned(800, 10)) then
+            centaine        <= to_unsigned(7, 4);
+            couter_tempC    <= unsigned(nbCpt1_599) - to_unsigned(700, 10);
+        elsif (unsigned(nbCpt1_599) < to_unsigned(900, 10)) then
+            centaine        <= to_unsigned(8, 4);
+            couter_tempC    <= unsigned(nbCpt1_599) - to_unsigned(800, 10);
+        elsif (unsigned(nbCpt1_599) < to_unsigned(1000, 10)) then
+            centaine        <= to_unsigned(9, 4);
+            couter_tempC    <= unsigned(nbCpt1_599) - to_unsigned(900, 10);
         end if;
+    end process;
+
+--------------------------------------------------------------------
+
+    Separation_cpt_1_599_dizaine : process(couter_tempC) -- separer en 2 process celui ci pour calculer centaine, dizaine, unite
+    begin
+        dizaine         <= to_unsigned(0, 4);
+        couter_tempD    <= couter_tempC;
+        if (couter_tempC < to_unsigned(10, 10)) then
+            dizaine         <= to_unsigned(0, 4);
+            couter_tempD    <= couter_tempC;
+        elsif (couter_tempC < to_unsigned(20, 10)) then
+            dizaine         <= to_unsigned(1, 4);
+            couter_tempD    <= couter_tempC - to_unsigned(10, 10);
+        elsif (couter_tempC < to_unsigned(30, 10)) then
+            dizaine         <= to_unsigned(2, 4);
+            couter_tempD    <= couter_tempC - to_unsigned(20, 10);
+        elsif (couter_tempC < to_unsigned(40, 10)) then
+            dizaine         <= to_unsigned(3, 4);
+            couter_tempD    <= couter_tempC - to_unsigned(30, 10);
+        elsif (couter_tempC < to_unsigned(50, 10)) then
+            dizaine         <= to_unsigned(4, 4);
+            couter_tempD    <= couter_tempC - to_unsigned(40, 10);
+        elsif (couter_tempC < to_unsigned(60, 10)) then
+            dizaine         <= to_unsigned(5, 4);
+            couter_tempD    <= couter_tempC - to_unsigned(50, 10);
+        elsif (couter_tempC < to_unsigned(70, 10)) then
+            dizaine         <= to_unsigned(6, 4);
+            couter_tempD    <= couter_tempC - to_unsigned(60, 10);
+        elsif (couter_tempC < to_unsigned(80, 10)) then
+            dizaine         <= to_unsigned(7, 4);
+            couter_tempD    <= couter_tempC - to_unsigned(70, 10);
+        elsif (couter_tempC < to_unsigned(90, 10)) then
+            dizaine         <= to_unsigned(8, 4);
+            couter_tempD    <= couter_tempC - to_unsigned(80, 10);
+        elsif (couter_tempC < to_unsigned(100, 10)) then
+            dizaine         <= to_unsigned(9, 4);
+            couter_tempD    <= couter_tempC - to_unsigned(90, 10);
+        end if;
+    end process;
+
+--------------------------------------------------------------------
+
+    Separation_cpt_1_599_unit : process(couter_tempD) -- separer en 2 process celui ci pour calculer centaine, dizaine, unite
+    begin
+        case couter_tempD is
+            when "0000000000" => unit <= to_unsigned(0, 4);
+            when "0000000001" => unit <= to_unsigned(1, 4);
+            when "0000000010" => unit <= to_unsigned(2, 4);
+            when "0000000011" => unit <= to_unsigned(3, 4);
+            when "0000000100" => unit <= to_unsigned(4, 4);
+            when "0000000101" => unit <= to_unsigned(5, 4);
+            when "0000000110" => unit <= to_unsigned(6, 4);
+            when "0000000111" => unit <= to_unsigned(7, 4);
+            when "0000001000" => unit <= to_unsigned(8, 4);
+            when "0000001001" => unit <= to_unsigned(9, 4);
+            when OTHERS => unit <= "1111";  --hyphen
+        end case;
     end process;
 
 --------------------------------------------------------------------
