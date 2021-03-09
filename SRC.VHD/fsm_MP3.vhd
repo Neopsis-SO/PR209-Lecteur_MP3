@@ -48,7 +48,7 @@ entity fsm_MP3 is
 end fsm_MP3;
 
 architecture Behavioral of fsm_MP3 is
-    type Etat is (Etat_Init, Etat_Play_Fwd, Etat_Play_Bwd, Etat_Pause, Etat_Stop);
+    type Etat is (Etat_Init, Etat_Play_Fwd, Etat_Play_Bwd, Etat_Pause);
     signal pr_state, nx_state : Etat := Etat_Init;
 begin
     state_update : process (clk, reset)
@@ -91,16 +91,9 @@ begin
                 elsif (b_left = '1') then
                     nx_state <= Etat_Play_Bwd;
                 elsif (b_center = '1') then
-                    nx_state <= Etat_Stop;
+                    nx_state <= Etat_Init;
                 else
                     nx_state <= Etat_Pause;
-                end if;
-            
-            when Etat_Stop => 
-                if (b_center = '1') then
-                    nx_state <= Etat_Play_Fwd;
-                else
-                    nx_state <= Etat_Stop;
                 end if;
                 
         end case;
@@ -134,15 +127,8 @@ begin
                 play_pause  <= '0';
                 restart     <= '0';
                 forward     <= '0';
-                volume_up   <= '0';
-                volume_down <= '0';
-                
-            when Etat_Stop => 
-                play_pause  <= '0';
-                restart     <= '1';
-                forward     <= '0';
-                volume_up   <= '0';
-                volume_down <= '0';
+                volume_up   <= b_up;
+                volume_down <= b_down;
                 
          end case;
     end process;

@@ -34,6 +34,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity cpt_1_9 is
     Port (  clk     : in    std_logic;
             reset   : in    std_logic;
+            restart : in    std_logic;
             inc     : in    std_logic;
             dec     : in    std_logic;
             value   : out   std_logic_vector(3 downto 0)
@@ -48,7 +49,9 @@ begin
         if (reset = '1') then
             counter  <= to_unsigned(5, 4);
         elsif (clk'event and clk = '1') then
-            if (dec = '1') then
+            if (restart = '1') then
+                counter  <= to_unsigned(5, 4);
+            elsif (dec = '1') then
                 if (counter = to_unsigned(1, 4)) then
                     counter <= counter;
                 else
