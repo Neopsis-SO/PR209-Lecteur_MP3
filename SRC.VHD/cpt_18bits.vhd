@@ -24,7 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -32,12 +32,39 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity cpt_18bits is
---  Port ( );
+    Port (  clk     : in    std_logic;
+            reset   : in    std_logic;
+            ce      : in    std_logic;
+            addr_w  : in    std_logic_vector(17 downto 0);
+            addr_r  : out   std_logic_vector(17 downto 0)
+            );
 end cpt_18bits;
 
 architecture Behavioral of cpt_18bits is
-
+    signal counter  : unsigned  (17 downto 0);   --2^18-1 = 262 143
+    signal addr_max : unsigned  (17 downto 0) := (OTHERS => '0');
+    
 begin
-
+    compteur_val_max : process(addr_w)
+    begin
+        addr_max <= unsigned(addr_w);
+    end process;
+    
+    compteur_adresse : process(clk, reset)
+    begin
+        if (reset = '1') then
+            counter  <= to_unsigned(0, 16);
+        elsif (clk'event and clk = '1') then
+            if (ce = '1') then
+                if (counter = addr_max) then
+                    counter <= to_unsigned(0, 18);
+                else
+                    counter <= counter + 1;
+                end if;
+            end if;
+        end if;
+    end process;
+    
+    addr_r <= std_logic_vector(counter);
 
 end Behavioral;
