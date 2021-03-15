@@ -40,7 +40,7 @@ entity cpt_0_44099 is
 end cpt_0_44099;
 
 architecture Behavioral of cpt_0_44099 is
-    signal counter  : unsigned  (15 downto 0);   -- 2^16 = 
+    signal counter  : unsigned  (15 downto 0);   -- 2^16 = 65 536
     
 begin
     process(clk, reset)
@@ -50,7 +50,7 @@ begin
         elsif (clk'event and clk = '1') then
             if (ce = '1') then
                 if (counter = to_unsigned(44099, 16)) then
-                    counter <= to_unsigned(44099, 16);
+                    counter <= to_unsigned(0, 16);
                 else
                     counter <= counter + 1;
                 end if;
