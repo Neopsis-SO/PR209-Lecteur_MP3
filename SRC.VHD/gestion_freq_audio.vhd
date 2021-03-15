@@ -49,7 +49,7 @@ begin
             ceP_couter  <= (OTHERS=> '0');
             cePWM       <= '0';
         elsif (clk'event and clk = '1') then
-                if (ceP_couter = 2767) then   -- (2 768 - 1)
+                if (ceP_couter = 2266) then   -- (2 267 - 1)
                 ceP_couter  <= (OTHERS=> '0');
                 cePWM       <= '1';
             else

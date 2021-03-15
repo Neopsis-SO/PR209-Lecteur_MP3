@@ -36,7 +36,8 @@ entity PWM is
             reset   : in    std_logic;
             ce      : in    std_logic;
             idata_n : in    std_logic_vector(10 downto 0);
-            odata   : out   std_logic
+            odata   : out   std_logic;
+            enable  : out   std_logic
             );
 end PWM;
 
@@ -46,7 +47,8 @@ architecture Behavioral of PWM is
     
 begin
 
-    val_data <= unsigned(signed(idata_n) + to_signed(1024,12));
+    enable      <= '1'; -- Permet d'activer la sortie audio
+    val_data    <= unsigned(signed(idata_n) + to_signed(1024,12));
 
     process(clk, reset)
     begin
@@ -55,7 +57,7 @@ begin
             odata   <= '0';
         elsif (clk'event and clk = '1') then
             if (ce = '1') then
-                if (counter = 2067) then
+                if (counter = 2066) then
                     odata   <= '0';
                     counter <= (OTHERS => '0');
                 else
