@@ -32,9 +32,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity lecteur_echantillon is
-    Port (  CLK100MHZ    : in    std_logic;
+    Port (  CLK100MHZ   : in    std_logic;
             reset       : in    std_logic;
-            AUD_PWM     : out   std_logic
+            AUD_PWM     : out   std_logic;
+            AUD_SD      : out   std_logic
             );
 end lecteur_echantillon;
 
@@ -66,7 +67,8 @@ architecture Behavioral of lecteur_echantillon is
                 reset   : in    std_logic;
                 ce      : in    std_logic;
                 idata_n : in    std_logic_vector(10 downto 0);
-                odata   : out   std_logic
+                odata   : out   std_logic;
+                enable  : out   std_logic
                 );
     end component;
     
@@ -103,7 +105,8 @@ begin
                     RESET_BARRE,
                     CE44100,
                     ROM_VALUE,
-                    AUD_PWM
+                    AUD_PWM,
+                    AUD_SD
                     );
                     
 end Behavioral;
