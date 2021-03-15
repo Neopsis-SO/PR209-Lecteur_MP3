@@ -42,33 +42,47 @@ entity PWM is
 end PWM;
 
 architecture Behavioral of PWM is
+    signal sig_data : unsigned(11 downto 0);
     signal val_data : unsigned(11 downto 0);
     signal counter  : unsigned(11 downto 0);
     
 begin
 
     enable      <= '1'; -- Permet d'activer la sortie audio
-    val_data    <= unsigned(signed(idata_n) + to_signed(1024,12));
-
-    process(clk, reset)
+    sig_data    <= unsigned(signed(idata_n) + to_signed(1024,12));
+    
+    compteur : process(clk, reset)
     begin
         if (reset = '1') then
-            counter <= to_unsigned(0, 12);
-            odata   <= '0';
+            counter <= (OTHERS => '0');
+        elsif (clk'event and clk = '1') then
+            if (counter = 2266) then
+                counter <= (OTHERS => '0');
+            else
+                counter <= counter + 1;
+            end if;
+        end if;
+    end process;
+    
+    
+    registre : process(clk, reset)
+    begin
+        if (reset = '1') then
+            val_data <= to_unsigned(0, 12);
         elsif (clk'event and clk = '1') then
             if (ce = '1') then
-                if (counter = 2066) then
-                    odata   <= '0';
-                    counter <= (OTHERS => '0');
-                else
-                    if (counter < val_data) then
-                        odata   <= '1';
-                    else
-                        odata   <= '0';
-                    end if;
-                    counter <= counter + 1;
-                end if;
+                val_data <= sig_data;
             end if;
+        end if;
+    end process;
+    
+    
+    modulateur : process(counter, val_data)
+    begin
+        if (counter < val_data) then    -- Pas besoin de vérifier que counter = 2266 car il ce remet à cette valeur dans un autre process
+            odata   <= '1';
+        else
+            odata   <= '0';
         end if;
     end process;
 end Behavioral;
