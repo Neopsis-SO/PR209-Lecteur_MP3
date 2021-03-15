@@ -49,12 +49,10 @@ begin
     memory : process(clk)
     begin
         if(clk'event and clk='0') then
-            if(r_w = '0') then --Ecriture de 2* le if pour ne pas desynchroniser les modules si lecture et ecriture au même CE
-                data_out_r <= Mem(to_integer(unsigned(addr_in_r)));
-            end if;
             if(r_w = '1') then
                 Mem(to_integer(unsigned(addr_in_w))) <= data_in_w(10 downto 0);
             end if;
+            data_out_r <= Mem(to_integer(unsigned(addr_in_r))); --Ecriture de 2* le if pour ne pas desynchroniser les modules si lecture et ecriture au même CE
         end if;
     end process;
 
