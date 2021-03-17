@@ -53,7 +53,7 @@ begin
     compteur_adresse : process(clk, reset)
     begin
         if (reset = '1') then
-            counter  <= to_unsigned(0, 16);
+            counter  <= to_unsigned(0, 18);
         elsif (clk'event and clk = '1') then
             if (ce = '1') then
                 if (counter = addr_max) then

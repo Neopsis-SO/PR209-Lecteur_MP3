@@ -81,7 +81,7 @@ architecture Behavioral of gestion_echantillon is
     
     signal RESET_BARRE  : std_logic;
     signal CE44100      : std_logic;
-    signal ADDRESS_R    : std_logic_vector(15 downto 0);
+    signal ADDRESS_R    : std_logic_vector(17 downto 0);
     signal RAM_VALUE    : std_logic_vector(10 downto 0);
     
 begin
@@ -102,7 +102,7 @@ begin
                     ADDRESS_R
                     );
         
-    ROM : wav_ram
+    RAM : wav_ram
         PORT MAP (  CLK100MHZ,
                     r_w,
                     addr_from_uart,
