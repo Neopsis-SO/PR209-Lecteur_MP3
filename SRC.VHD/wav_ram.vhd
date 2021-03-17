@@ -35,7 +35,7 @@ entity wav_ram is
     Port (  clk         : in    std_logic;
             r_w         : in    std_logic;  --Ecriture a 1 / Lecture a 0
             addr_in_w   : in    std_logic_vector(17 downto 0);  --Adresse de la data devant être ecrite dans la RAM
-            data_in_w   : in    std_logic_vector(15 downto 0);  --Data devant être ecrite dans la RAM a l'adresse ci-dessus
+            data_in_w   : in    std_logic_vector(10 downto 0);  --Data devant être ecrite dans la RAM a l'adresse ci-dessus
             addr_in_r   : in    std_logic_vector(17 downto 0);  --Addresse de la data allant au modulateur
             data_out_r  : out   std_logic_vector(10 downto 0)   --Data allant jusqu au modulateur a partir de l adresse ci-dessus
             );
@@ -50,7 +50,7 @@ begin
     begin
         if(clk'event and clk='0') then
             if(r_w = '1') then
-                Mem(to_integer(unsigned(addr_in_w))) <= data_in_w(10 downto 0);
+                Mem(to_integer(unsigned(addr_in_w))) <= data_in_w;
             end if;
             data_out_r <= Mem(to_integer(unsigned(addr_in_r))); --Ecriture de 2* le if pour ne pas desynchroniser les modules si lecture et ecriture au même CE
         end if;
