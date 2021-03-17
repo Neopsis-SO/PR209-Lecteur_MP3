@@ -66,7 +66,7 @@ architecture Behavioral of MP3 is
         Port (  CLK100MHZ       : in    std_logic;
                 reset           : in    std_logic;
                 r_w             : in    std_logic;  --Ecriture a 1 / Lecture a 0 dans la memoire
-                sound_level     : in    std_logic_vector(3 downto 0);
+--                sound_level     : in    std_logic_vector(3 downto 0);
                 addr_from_uart  : in    std_logic_vector(17 downto 0);
                 data_from_uart  : in    std_logic_vector(15 downto 0);
                 AUD_PWM         : out   std_logic;
@@ -94,24 +94,24 @@ architecture Behavioral of MP3 is
 begin
     RESET_BARRE <= not(reset); 
     
-    GESTION : gestion_MP3
-        Port Map (  CLK100MHZ,
-                    reset,
-                    BTNU,
-                    BTND,
-                    BTNL,
-                    BTNR,
-                    BTNC,
-                    Sevenseg,
-                    AN,
-                    SOUND_LEVEL
-                    );
+--    GESTION : gestion_MP3
+--        Port Map (  CLK100MHZ,
+--                    reset,
+--                    BTNU,
+--                    BTND,
+--                    BTNL,
+--                    BTNR,
+--                    BTNC,
+--                    Sevenseg,
+--                    AN,
+--                    SOUND_LEVEL
+--                    );
                     
     ENCHANTILLONS : gestion_echantillon
         Port Map (  CLK100MHZ,
                     reset,
                     RW,
-                    SOUND_LEVEL,
+--                    SOUND_LEVEL,
                     ADDR_TO_SAVE,
                     DATA_TO_SAVE,
                     AUD_PWM,

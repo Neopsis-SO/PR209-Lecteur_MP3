@@ -35,7 +35,7 @@ entity gestion_echantillon is
     Port (  CLK100MHZ       : in    std_logic;
             reset           : in    std_logic;
             r_w             : in    std_logic;  --Ecriture a 1 / Lecture a 0 dans la memoire
-            sound_level     : in    std_logic_vector(3 downto 0);
+--            sound_level     : in    std_logic_vector(3 downto 0);
             addr_from_uart  : in    std_logic_vector(17 downto 0);
             data_from_uart  : in    std_logic_vector(15 downto 0);
             AUD_PWM         : out   std_logic;
@@ -122,20 +122,21 @@ begin
                     ADDRESS_R,
                     RAM_VALUE
                     );
-    VOLUME : volume_manager
-        Port Map (  CLK100MHZ,
-                    RESET_BARRE,
-                    CE44100,
-                    sound_level,
-                    RAM_VALUE,
-                    VOL_FR_VALUE
-                    );
+--    VOLUME : volume_manager
+--        Port Map (  CLK100MHZ,
+--                    RESET_BARRE,
+--                    CE44100,
+--                    sound_level,
+--                    RAM_VALUE,
+--                    VOL_FR_VALUE
+--                    );
             
     Module_PWM : PWM
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
                     CE44100,
-                    VOL_FR_VALUE,
+                    RAM_VALUE,
+--                    VOL_FR_VALUE,
                     AUD_PWM,
                     AUD_SD
                     );
