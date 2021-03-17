@@ -48,7 +48,7 @@ architecture Behavioral of wav_ram is
 begin
     memory : process(clk)
     begin
-        if(clk'event and clk='0') then
+        if(clk'event and clk='1') then
             if(r_w = '1') then
                 Mem(to_integer(unsigned(addr_in_w))) <= data_in_w;
             end if;
