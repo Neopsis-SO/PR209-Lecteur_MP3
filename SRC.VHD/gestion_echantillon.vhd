@@ -35,6 +35,7 @@ entity gestion_echantillon is
     Port (  CLK100MHZ       : in    std_logic;
             reset           : in    std_logic;
             r_w             : in    std_logic;  --Ecriture a 1 / Lecture a 0 dans la memoire
+            sound_level     : in    std_logic_vector(3 downto 0);
             addr_from_uart  : in    std_logic_vector(17 downto 0);
             data_from_uart  : in    std_logic_vector(15 downto 0);
             AUD_PWM         : out   std_logic;
@@ -69,6 +70,16 @@ architecture Behavioral of gestion_echantillon is
                 );
     end component;
     
+    component volume_manager
+        Port (  clk     : in    std_logic;
+                reset   : in    std_logic;
+                ce      : in    std_logic;
+                switch  : in    std_logic_vector(3 downto 0);
+                idata   : in    std_logic_vector(10 downto 0);
+                odata   : out   std_logic_vector(10 downto 0)
+                );
+    end component;
+    
     component PWM
         Port (  clk     : in    std_logic;
                 reset   : in    std_logic;
@@ -83,6 +94,7 @@ architecture Behavioral of gestion_echantillon is
     signal CE44100      : std_logic;
     signal ADDRESS_R    : std_logic_vector(17 downto 0);
     signal RAM_VALUE    : std_logic_vector(10 downto 0);
+    signal VOL_FR_VALUE : std_logic_vector(10 downto 0);
     
 begin
 
@@ -110,12 +122,20 @@ begin
                     ADDRESS_R,
                     RAM_VALUE
                     );
-        
+    VOLUME : volume_manager
+        Port Map (  CLK100MHZ,
+                    RESET_BARRE,
+                    CE44100,
+                    sound_level,
+                    RAM_VALUE,
+                    VOL_FR_VALUE
+                    );
+            
     Module_PWM : PWM
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
                     CE44100,
-                    RAM_VALUE,
+                    VOL_FR_VALUE,
                     AUD_PWM,
                     AUD_SD
                     );

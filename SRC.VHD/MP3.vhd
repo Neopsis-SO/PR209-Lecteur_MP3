@@ -57,7 +57,8 @@ architecture Behavioral of MP3 is
                 BTNR        : in    std_logic;  --Bouton droite
                 BTNC        : in    std_logic;  --Bouton centre
                 Sevenseg    : out   std_logic_vector(7 downto 0);
-                AN          : out   std_logic_vector(7 downto 0)
+                AN          : out   std_logic_vector(7 downto 0);
+                Sound_level : out   std_logic_vector(3 downto 0)
                 );
     end component;
     
@@ -65,6 +66,7 @@ architecture Behavioral of MP3 is
         Port (  CLK100MHZ       : in    std_logic;
                 reset           : in    std_logic;
                 r_w             : in    std_logic;  --Ecriture a 1 / Lecture a 0 dans la memoire
+                sound_level     : in    std_logic_vector(3 downto 0);
                 addr_from_uart  : in    std_logic_vector(17 downto 0);
                 data_from_uart  : in    std_logic_vector(15 downto 0);
                 AUD_PWM         : out   std_logic;
@@ -87,6 +89,7 @@ architecture Behavioral of MP3 is
     signal RW           : std_logic;
     signal DATA_TO_SAVE : std_logic_vector (15 downto 0);
     signal ADDR_TO_SAVE : std_logic_vector (17 downto 0);
+    signal SOUND_LEVEL  : std_logic_vector (3 downto 0);
     
 begin
     RESET_BARRE <= not(reset); 
@@ -100,13 +103,15 @@ begin
                     BTNR,
                     BTNC,
                     Sevenseg,
-                    AN
+                    AN,
+                    SOUND_LEVEL
                     );
                     
     ENCHANTILLONS : gestion_echantillon
         Port Map (  CLK100MHZ,
                     reset,
                     RW,
+                    SOUND_LEVEL,
                     ADDR_TO_SAVE,
                     DATA_TO_SAVE,
                     AUD_PWM,
@@ -114,13 +119,13 @@ begin
                     );
 
     UART : full_uart_recv
-    PORT MAP (
-            CLK100MHZ,
-            RESET_BARRE,
-            UART_TXD_IN,
-            ADDR_TO_SAVE,
-            DATA_TO_SAVE,
-            RW
-            );
+        PORT MAP (
+                CLK100MHZ,
+                RESET_BARRE,
+                UART_TXD_IN,
+                ADDR_TO_SAVE,
+                DATA_TO_SAVE,
+                RW
+                );
     
 end Behavioral;

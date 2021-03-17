@@ -40,7 +40,8 @@ entity gestion_MP3 is
             BTNR        : in    std_logic;  --Bouton droite
             BTNC        : in    std_logic;  --Bouton centre
             Sevenseg    : out   std_logic_vector(7 downto 0);
-            AN          : out   std_logic_vector(7 downto 0)
+            AN          : out   std_logic_vector(7 downto 0);
+            Sound_level : out   std_logic_vector(3 downto 0)
             );
 end gestion_MP3;
 
