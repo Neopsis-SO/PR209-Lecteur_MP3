@@ -62,13 +62,13 @@ begin
                 elsif (start = '1') then
                     if (forward = '1') then
                         if (counter = to_unsigned(599, 10)) then
-                            counter <= counter;
+                            counter <= to_unsigned(1, 10);
                         else
                             counter <= counter + 1;
                         end if;
                     else
                         if (counter = to_unsigned(1, 10)) then
-                            counter <= counter;
+                            counter <= to_unsigned(599, 10);
                         else
                             counter <= counter - 1;
                         end if;
