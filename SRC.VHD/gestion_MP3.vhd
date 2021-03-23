@@ -41,7 +41,10 @@ entity gestion_MP3 is
             BTNC        : in    std_logic;  --Bouton centre
             Sevenseg    : out   std_logic_vector(7 downto 0);
             AN          : out   std_logic_vector(7 downto 0);
-            Sound_level : out   std_logic_vector(3 downto 0)
+            Sound_level : out   std_logic_vector(3 downto 0);
+            Init_add    : out   std_logic;
+            Start_add   : out   std_logic;
+            Forward_add : out   std_logic
             );
 end gestion_MP3;
 
@@ -167,7 +170,11 @@ architecture Behavioral of gestion_MP3 is
 begin
 
     RESET_BARRE <= not(reset);
-    
+    Sound_level <= NB_SON;
+    Init_add    <= RESTART;
+    Start_add   <= PLAY_PAUSE;
+    Forward_add <= FORWARD;
+            
     REG_B_CENTER : detect_impulsion 
         PORT MAP (  CLK100MHZ,
                     BTNC,

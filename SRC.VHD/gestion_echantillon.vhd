@@ -35,7 +35,10 @@ entity gestion_echantillon is
     Port (  CLK100MHZ       : in    std_logic;
             reset           : in    std_logic;
             r_w             : in    std_logic;  --Ecriture a 1 / Lecture a 0 dans la memoire
---            sound_level     : in    std_logic_vector(3 downto 0);
+            init            : in    std_logic;
+            start           : in    std_logic;
+            forward         : in    std_logic;
+            sound_level     : in    std_logic_vector(3 downto 0);
             addr_from_uart  : in    std_logic_vector(17 downto 0);
             data_from_uart  : in    std_logic_vector(15 downto 0);
             AUD_PWM         : out   std_logic;
@@ -55,6 +58,9 @@ architecture Behavioral of gestion_echantillon is
         Port (  clk     : in    std_logic;
                 reset   : in    std_logic;
                 ce      : in    std_logic;
+                init    : in    std_logic;
+                start   : in    std_logic;
+                forward : in    std_logic;
                 addr_w  : in    std_logic_vector(17 downto 0);
                 addr_r  : out   std_logic_vector(17 downto 0)
                 );
@@ -110,6 +116,9 @@ begin
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
                     CE44100,
+                    init,
+                    start,
+                    forward,
                     addr_from_uart,
                     ADDRESS_R
                     );
@@ -122,21 +131,21 @@ begin
                     ADDRESS_R,
                     RAM_VALUE
                     );
---    VOLUME : volume_manager
---        Port Map (  CLK100MHZ,
---                    RESET_BARRE,
---                    CE44100,
---                    sound_level,
---                    RAM_VALUE,
---                    VOL_FR_VALUE
---                    );
+    VOLUME : volume_manager
+        Port Map (  CLK100MHZ,
+                    RESET_BARRE,
+                    CE44100,
+                    sound_level,
+                    RAM_VALUE,
+                    VOL_FR_VALUE
+                    );
             
     Module_PWM : PWM
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
                     CE44100,
-                    RAM_VALUE,
---                    VOL_FR_VALUE,
+--                    RAM_VALUE,
+                    VOL_FR_VALUE,
                     AUD_PWM,
                     AUD_SD
                     );

@@ -35,6 +35,9 @@ entity cpt_18bits is
     Port (  clk     : in    std_logic;
             reset   : in    std_logic;
             ce      : in    std_logic;
+            init    : in    std_logic;
+            start   : in    std_logic;
+            forward : in    std_logic;
             addr_w  : in    std_logic_vector(17 downto 0);
             addr_r  : out   std_logic_vector(17 downto 0)
             );
@@ -56,10 +59,24 @@ begin
             counter  <= to_unsigned(0, 18);
         elsif (clk'event and clk = '1') then
             if (ce = '1') then
-                if (counter = addr_max) then
-                    counter <= to_unsigned(0, 18);
-                else
-                    counter <= counter + 1;
+                if (init = '1') then
+                    counter  <= to_unsigned(0, 18);
+                elsif (start = '0') then
+                    counter <= counter;
+                elsif (start = '1') then
+                    if (forward = '1') then
+                        if (counter = addr_max) then
+                            counter <= to_unsigned(0, 18);
+                        else
+                            counter <= counter + 1;
+                        end if;
+                    else
+                        if (counter = to_unsigned(0, 18)) then
+                            counter <= addr_max;
+                        else
+                            counter <= counter - 1;
+                        end if;
+                    end if;
                 end if;
             end if;
         end if;

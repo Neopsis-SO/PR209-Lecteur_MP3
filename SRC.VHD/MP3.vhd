@@ -58,7 +58,10 @@ architecture Behavioral of MP3 is
                 BTNC        : in    std_logic;  --Bouton centre
                 Sevenseg    : out   std_logic_vector(7 downto 0);
                 AN          : out   std_logic_vector(7 downto 0);
-                Sound_level : out   std_logic_vector(3 downto 0)
+                Sound_level : out   std_logic_vector(3 downto 0);
+                Init_add    : out   std_logic;
+                Start_add   : out   std_logic;
+                Forward_add : out   std_logic
                 );
     end component;
     
@@ -66,7 +69,10 @@ architecture Behavioral of MP3 is
         Port (  CLK100MHZ       : in    std_logic;
                 reset           : in    std_logic;
                 r_w             : in    std_logic;  --Ecriture a 1 / Lecture a 0 dans la memoire
---                sound_level     : in    std_logic_vector(3 downto 0);
+                init            : in    std_logic;
+                start           : in    std_logic;
+                forward         : in    std_logic;
+                sound_level     : in    std_logic_vector(3 downto 0);
                 addr_from_uart  : in    std_logic_vector(17 downto 0);
                 data_from_uart  : in    std_logic_vector(15 downto 0);
                 AUD_PWM         : out   std_logic;
@@ -87,6 +93,9 @@ architecture Behavioral of MP3 is
     
     signal RESET_BARRE  : std_logic; --signal a n'utiliser que sur les full_uart_recv
     signal RW           : std_logic;
+    signal INIT         : std_logic;
+    signal START        : std_logic;
+    signal FORWARD      : std_logic;
     signal DATA_TO_SAVE : std_logic_vector (15 downto 0);
     signal ADDR_TO_SAVE : std_logic_vector (17 downto 0);
     signal SOUND_LEVEL  : std_logic_vector (3 downto 0);
@@ -94,24 +103,30 @@ architecture Behavioral of MP3 is
 begin
     RESET_BARRE <= not(reset); 
     
---    GESTION : gestion_MP3
---        Port Map (  CLK100MHZ,
---                    reset,
---                    BTNU,
---                    BTND,
---                    BTNL,
---                    BTNR,
---                    BTNC,
---                    Sevenseg,
---                    AN,
---                    SOUND_LEVEL
---                    );
+    GESTION : gestion_MP3
+        Port Map (  CLK100MHZ,
+                    reset,
+                    BTNU,
+                    BTND,
+                    BTNL,
+                    BTNR,
+                    BTNC,
+                    Sevenseg,
+                    AN,
+                    SOUND_LEVEL,
+                    INIT,
+                    START,
+                    FORWARD
+                    );
                     
     ENCHANTILLONS : gestion_echantillon
         Port Map (  CLK100MHZ,
                     reset,
                     RW,
---                    SOUND_LEVEL,
+                    INIT,
+                    START,
+                    FORWARD,
+                    SOUND_LEVEL,
                     ADDR_TO_SAVE,
                     DATA_TO_SAVE,
                     AUD_PWM,
