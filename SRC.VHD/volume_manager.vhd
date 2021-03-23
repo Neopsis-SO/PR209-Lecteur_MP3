@@ -45,27 +45,18 @@ architecture Behavioral of volume_manager is
 
 begin
 
-    compteur_adresse : process(clk, reset)
-    begin
-        if (reset = '1') then
-            odata  <= (OTHERS => '0');
-        elsif (clk'event and clk = '1') then
-            if (ce = '1') then
-                case switch is
-                    when "0000" => odata <= idata(10 downto 9)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10);
-                    when "0001" => odata <= idata(10 downto 8)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10);
-                    when "0010" => odata <= idata(10 downto 7)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10);
-                    when "0011" => odata <= idata(10 downto 6)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10);
-                    when "0100" => odata <= idata(10 downto 5)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10);
-                    when "0101" => odata <= idata(10 downto 4)&idata(10)&idata(10)&idata(10)&idata(10);
-                    when "0110" => odata <= idata(10 downto 3)&idata(10)&idata(10)&idata(10);
-                    when "0111" => odata <= idata(10 downto 2)&idata(10)&idata(10);
-                    when "1000" => odata <= idata(10 downto 1)&idata(10);
-                    when "1001" => odata <= idata;
-                    when OTHERS => odata <= idata(10 downto 4)&idata(10)&idata(10)&idata(10)&idata(10);
-                end case;
-            end if;
-        end if;
-    end process;
-
+    with switch select
+    odata <= 
+        idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)& idata(10 downto 9)    when "0000",
+        idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)& idata(10 downto 8)  when "0001",
+        idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)& idata(10 downto 7)    when "0010",
+        idata(10)&idata(10)&idata(10)&idata(10)&idata(10)&idata(10)& idata(10 downto 6)  when "0011",
+        idata(10)&idata(10)&idata(10)&idata(10)&idata(10)& idata(10 downto 5)    when "0100",
+        idata(10)&idata(10)&idata(10)&idata(10)& idata(10 downto 4)  when "0101",
+        idata(10)&idata(10)&idata(10)& idata(10 downto 3)    when "0110",
+        idata(10)&idata(10)& idata(10 downto 2)  when "0111",
+        idata(10)& idata(10 downto 1)    when "1000",
+        idata   when "1001",
+        idata(10 downto 4)&idata(10)&idata(10)&idata(10)&idata(10)  when OTHERS;
+    
 end Behavioral;
