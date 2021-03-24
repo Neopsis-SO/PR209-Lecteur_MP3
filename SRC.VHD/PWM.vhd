@@ -32,19 +32,20 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity PWM is
-    Port (  clk     : in    std_logic;
-            reset   : in    std_logic;
-            ce      : in    std_logic;
-            idata_n : in    std_logic_vector(10 downto 0);
-            odata   : out   std_logic;
-            enable  : out   std_logic
+    Port (  clk         : in    std_logic;
+            reset       : in    std_logic;
+            ce          : in    std_logic;
+            idata_n     : in    std_logic_vector(12 downto 0);
+            nbPeriode   : in    std_logic_vector(13 downto 0);
+            odata       : out   std_logic;
+            enable      : out   std_logic
             );
 end PWM;
 
 architecture Behavioral of PWM is
-    signal sig_data : unsigned(11 downto 0);
-    signal val_data : unsigned(11 downto 0);
-    signal counter  : unsigned(11 downto 0);
+    signal      sig_data    : unsigned(11 downto 0);
+    signal      val_data    : unsigned(11 downto 0);
+    signal      counter     : unsigned(11 downto 0);
     
 begin
 
@@ -56,7 +57,7 @@ begin
         if (reset = '1') then
             counter <= (OTHERS => '0');
         elsif (clk'event and clk = '1') then
-            if (counter = 2266) then
+            if (counter = unsigned(nbPeriode)) then
                 counter <= (OTHERS => '0');
             else
                 counter <= counter + 1;
