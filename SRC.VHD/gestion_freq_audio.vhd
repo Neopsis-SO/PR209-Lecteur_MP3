@@ -41,7 +41,7 @@ end gestion_freq_audio;
 
 architecture Behavioral of gestion_freq_audio is
     constant    CONST_44100          : unsigned  (11 DOWNTO 0) := to_unsigned(2266,12);
-    signal      SIG_ceP_couter       : unsigned  (13 DOWNTO 0);  -- 2^12 = 4 096 / 2^14 = 16 384 pour (2 266*4)
+    signal      SIG_cePWM_couter     : unsigned  (13 DOWNTO 0);  -- 2^12 = 4 096 / 2^14 = 16 384 pour (2 266*4)
     signal      SIG_counterMax       : unsigned  (13 DOWNTO 0);
     signal      SIG_operateur        : std_logic;    --SIG = 1 -> VITESSE REDUITE / SIG = 0 -> VITESSE AUGMENTER
     signal      SIG_multiplicateur   : unsigned (1 downto 0);
@@ -72,14 +72,14 @@ begin
     process(clk, reset)
     begin
         if (reset = '1') then
-            SIG_ceP_couter  <= (OTHERS=> '0');
+            SIG_cePWM_couter  <= (OTHERS=> '0');
             cePWM       <= '0';
         elsif (clk'event and clk = '1') then
-                if (SIG_ceP_couter = SIG_counterMax) then
-                SIG_ceP_couter  <= (OTHERS=> '0');
+                if (SIG_cePWM_couter = SIG_counterMax) then
+                SIG_cePWM_couter  <= (OTHERS=> '0');
                 cePWM       <= '1';
             else
-                SIG_ceP_couter  <= SIG_ceP_couter + 1;
+                SIG_cePWM_couter  <= SIG_cePWM_couter + 1;
                 cePWM       <= '0';
             end if;
         end if;
