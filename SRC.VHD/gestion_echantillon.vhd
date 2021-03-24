@@ -39,6 +39,7 @@ entity gestion_echantillon is
             start           : in    std_logic;
             forward         : in    std_logic;
             sound_level     : in    std_logic_vector(3 downto 0);
+            switch          : in    std_logic_vector(2 downto 0);
             addr_from_uart  : in    std_logic_vector(17 downto 0);
             data_from_uart  : in    std_logic_vector(15 downto 0);
             AUD_PWM         : out   std_logic;
@@ -50,7 +51,9 @@ architecture Behavioral of gestion_echantillon is
     component gestion_freq_audio
         Port (  clk             : in    std_logic;
                 reset           : in    std_logic;
-                cePWM           : out   std_logic  -- Frequence de 44100Hz
+                multiplicateur  : in    std_logic_vector(2 downto 0);
+                cePWM           : out   std_logic;  -- Frequence multiple de 44100Hz
+                nbPeriode       : out   std_logic_vector(13 downto 0)
                 );
     end component;
     
@@ -86,21 +89,31 @@ architecture Behavioral of gestion_echantillon is
                 );
     end component;
     
-    component PWM
-        Port (  clk     : in    std_logic;
-                reset   : in    std_logic;
-                ce      : in    std_logic;
-                idata_n : in    std_logic_vector(10 downto 0);
-                odata   : out   std_logic;
-                enable  : out   std_logic
+    component speed_manager
+        Port (  multiplicateur  : in    std_logic_vector(2 downto 0);
+                idata           : in    std_logic_vector(10 downto 0);
+                odata           : out   std_logic_vector(12 downto 0)
                 );
     end component;
     
-    signal RESET_BARRE  : std_logic;
-    signal CE44100      : std_logic;
-    signal ADDRESS_R    : std_logic_vector(17 downto 0);
-    signal RAM_VALUE    : std_logic_vector(10 downto 0);
-    signal VOL_FR_VALUE : std_logic_vector(10 downto 0);
+    component PWM
+        Port (  clk         : in    std_logic;
+                reset       : in    std_logic;
+                ce          : in    std_logic;
+                idata_n     : in    std_logic_vector(12 downto 0);
+                nbPeriode   : in    std_logic_vector(13 downto 0);
+                odata       : out   std_logic;
+                enable      : out   std_logic
+                );
+    end component;
+    
+    signal RESET_BARRE      : std_logic;
+    signal CE44100          : std_logic;
+    signal ADDRESS_R        : std_logic_vector(17 downto 0);
+    signal RAM_FR_VALUE     : std_logic_vector(10 downto 0);
+    signal VOL_FR_VALUE     : std_logic_vector(10 downto 0);
+    signal SPEED_FR_VALUE   : std_logic_vector(12 downto 0);
+    signal SIG_NB_PERIODE   : std_logic_vector(13 downto 0);
     
 begin
 
@@ -109,7 +122,9 @@ begin
     BASE_DE_TEMPS_44100Hz : gestion_freq_audio
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
-                    CE44100
+                    switch,
+                    CE44100,
+                    SIG_NB_PERIODE
                     );
     
     COMPTEUR_D_ADRESSE : cpt_18bits
@@ -129,23 +144,29 @@ begin
                     addr_from_uart,
                     data_from_uart(10 downto 0),
                     ADDRESS_R,
-                    RAM_VALUE
+                    RAM_FR_VALUE
                     );
     VOLUME : volume_manager
         Port Map (  CLK100MHZ,
                     RESET_BARRE,
                     CE44100,
                     sound_level,
-                    RAM_VALUE,
+                    RAM_FR_VALUE,
                     VOL_FR_VALUE
                     );
             
+    SPEED : speed_manager
+        Port Map (  switch,
+                    VOL_FR_VALUE,
+                    SPEED_FR_VALUE
+                    );
+                    
     Module_PWM : PWM
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
                     CE44100,
---                    RAM_VALUE,
-                    VOL_FR_VALUE,
+                    SPEED_FR_VALUE,
+                    SIG_NB_PERIODE,
                     AUD_PWM,
                     AUD_SD
                     );
