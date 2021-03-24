@@ -43,14 +43,14 @@ entity PWM is
 end PWM;
 
 architecture Behavioral of PWM is
-    signal      sig_data    : unsigned(11 downto 0);
-    signal      val_data    : unsigned(11 downto 0);
-    signal      counter     : unsigned(11 downto 0);
+    signal      sig_data    : unsigned(13 downto 0);
+    signal      val_data    : unsigned(13 downto 0);
+    signal      counter     : unsigned(13 downto 0);
     
 begin
 
     enable      <= '1'; -- Permet d'activer la sortie audio
-    sig_data    <= unsigned(signed(idata_n) + to_signed(1024,12));
+    sig_data    <= unsigned(signed(idata_n) + to_signed(1024,14));
     
     compteur : process(clk, reset)
     begin
@@ -69,7 +69,7 @@ begin
     registre : process(clk, reset)
     begin
         if (reset = '1') then
-            val_data <= to_unsigned(0, 12);
+            val_data <= to_unsigned(0, 14);
         elsif (clk'event and clk = '1') then
             if (ce = '1') then
                 val_data <= sig_data;
