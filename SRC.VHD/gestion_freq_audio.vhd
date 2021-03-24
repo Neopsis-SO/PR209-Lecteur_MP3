@@ -35,7 +35,8 @@ entity gestion_freq_audio is
     Port (  clk             : in    std_logic;
             reset           : in    std_logic;
             multiplicateur  : in    std_logic_vector(2 downto 0);
-            cePWM           : out   std_logic  -- Frequence de 44100Hz
+            cePWM           : out   std_logic;  -- Frequence multiple de 44100Hz
+            nbPeriode       : out   std_logic_vector(13 downto 0)
             );
 end gestion_freq_audio;
 
@@ -50,6 +51,7 @@ begin
 
     SIG_operateur       <= multiplicateur(2);
     SIG_multiplicateur  <= unsigned(multiplicateur (1 downto 0));
+    nbPeriode           <= std_logic_vector(SIG_counterMax);
     
     process (SIG_operateur, SIG_multiplicateur)
     begin
