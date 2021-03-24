@@ -46,19 +46,19 @@ begin
     SIG_operateur       <= multiplicateur(2);
     SIG_multiplicateur  <= multiplicateur (1 downto 0);
 
-    process (SIG_operateur, SIG_multiplicateur)
+    process (SIG_operateur, SIG_multiplicateur, idata)
     begin
         if (SIG_operateur = '0') then
             case SIG_multiplicateur is
-                when "01"   => odata <= "000"   & idata(10 downto 1);
-                when "10"   => odata <= "0000"  & idata(10 downto 2);
-                when OTHERS => odata <= "00"    & idata(10 downto 0);
+                when "01"   => odata <= idata(10)&idata(10)&idata(10)           & idata(10 downto 1);
+                when "10"   => odata <= idata(10)&idata(10)&idata(10)&idata(10) & idata(10 downto 2);
+                when OTHERS => odata <= idata(10)&idata(10)                     & idata(10 downto 0);
             end case;
         else
             case SIG_multiplicateur is
-                when "01"   => odata <= '0' &   idata(10 downto 0) & '0';
-                when "10"   => odata <=         idata(10 downto 0) & "00";
-                when OTHERS => odata <= "00" &  idata(10 downto 0);
+                when "01"   => odata <= idata(10)&              idata(10 downto 0) & idata(10);
+                when "10"   => odata <=                         idata(10 downto 0) & idata(10)&idata(10);
+                when OTHERS => odata <= idata(10)&idata(10)&    idata(10 downto 0);
             end case;
         end if;  
     end process;
