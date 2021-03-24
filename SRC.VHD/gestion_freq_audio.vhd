@@ -34,26 +34,52 @@ use IEEE.NUMERIC_STD.ALL;
 entity gestion_freq_audio is
     Port (  clk             : in    std_logic;
             reset           : in    std_logic;
+            multiplicateur  : in    std_logic_vector(2 downto 0);
             cePWM           : out   std_logic  -- Frequence de 44100Hz
             );
 end gestion_freq_audio;
 
 architecture Behavioral of gestion_freq_audio is
-    signal ceP_couter   : unsigned  (11 DOWNTO 0);  -- 2^12 = 4 096
-    
+    constant    CONST_44100          : unsigned  (11 DOWNTO 0) := to_unsigned(2266,12);
+    signal      SIG_ceP_couter       : unsigned  (13 DOWNTO 0);  -- 2^12 = 4 096 / 2^14 = 16 384 pour (2 266*4)
+    signal      SIG_counterMax       : unsigned  (13 DOWNTO 0);
+    signal      SIG_operateur        : std_logic;    --SIG = 1 -> VITESSE REDUITE / SIG = 0 -> VITESSE AUGMENTER
+    signal      SIG_multiplicateur   : unsigned (1 downto 0);
+
 begin
+
+    SIG_operateur       <= multiplicateur(2);
+    SIG_multiplicateur  <= unsigned(multiplicateur (1 downto 0));
+    
+    process (SIG_operateur, SIG_multiplicateur)
+    begin
+        if (SIG_operateur = '0') then
+            case SIG_multiplicateur is
+                when "01"   => SIG_counterMax <= to_unsigned(0, 3) & CONST_44100(11 downto 1);
+                when "10"   => SIG_counterMax <= to_unsigned(0, 4) & CONST_44100(11 downto 2);
+                when OTHERS => SIG_counterMax <= to_unsigned(0, 2) & CONST_44100(11 downto 0);
+            end case;
+        else
+            case SIG_multiplicateur is
+                when "01"   => SIG_counterMax <= to_unsigned(0, 1) & CONST_44100(11 downto 0) & to_unsigned(0, 1);
+                when "10"   => SIG_counterMax <= CONST_44100(11 downto 0) & to_unsigned(0, 2);
+                when OTHERS => SIG_counterMax <= to_unsigned(0, 2) & CONST_44100(11 downto 0);
+            end case;
+        end if;  
+    end process;
+    
+    
     process(clk, reset)
     begin
         if (reset = '1') then
-
-            ceP_couter  <= (OTHERS=> '0');
+            SIG_ceP_couter  <= (OTHERS=> '0');
             cePWM       <= '0';
         elsif (clk'event and clk = '1') then
-                if (ceP_couter = 2266) then   -- (2 267 - 1)
-                ceP_couter  <= (OTHERS=> '0');
+                if (SIG_ceP_couter = SIG_counterMax) then
+                SIG_ceP_couter  <= (OTHERS=> '0');
                 cePWM       <= '1';
             else
-                ceP_couter  <= ceP_couter + 1;
+                SIG_ceP_couter  <= SIG_ceP_couter + 1;
                 cePWM       <= '0';
             end if;
         end if;
