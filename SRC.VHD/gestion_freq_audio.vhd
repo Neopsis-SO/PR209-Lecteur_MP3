@@ -45,12 +45,12 @@ architecture Behavioral of gestion_freq_audio is
     signal      SIG_cePWM_couter     : unsigned  (13 DOWNTO 0);  -- 2^12 = 4 096 / 2^14 = 16 384 pour (2 266*4)
     signal      SIG_counterMax       : unsigned  (13 DOWNTO 0);
     signal      SIG_operateur        : std_logic;    --SIG = 1 -> VITESSE REDUITE / SIG = 0 -> VITESSE AUGMENTER
-    signal      SIG_multiplicateur   : unsigned (1 downto 0);
+    signal      SIG_multiplicateur   : std_logic_vector (1 downto 0);
 
 begin
 
     SIG_operateur       <= multiplicateur(2);
-    SIG_multiplicateur  <= unsigned(multiplicateur (1 downto 0));
+    SIG_multiplicateur  <= multiplicateur (1 downto 0);
     nbPeriode           <= std_logic_vector(SIG_counterMax);
     
     process (SIG_operateur, SIG_multiplicateur)
