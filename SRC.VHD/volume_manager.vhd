@@ -32,10 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity volume_manager is
-    Port (  clk     : in    std_logic;
-            reset   : in    std_logic;
-            ce      : in    std_logic;
-            switch  : in    std_logic_vector(3 downto 0);
+    Port (  switch  : in    std_logic_vector(3 downto 0);
             idata   : in    std_logic_vector(10 downto 0);
             odata   : out   std_logic_vector(10 downto 0)
             );

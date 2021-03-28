@@ -80,10 +80,7 @@ architecture Behavioral of gestion_echantillon is
     end component;
     
     component volume_manager
-        Port (  clk     : in    std_logic;
-                reset   : in    std_logic;
-                ce      : in    std_logic;
-                switch  : in    std_logic_vector(3 downto 0);
+        Port (  switch  : in    std_logic_vector(3 downto 0);
                 idata   : in    std_logic_vector(10 downto 0);
                 odata   : out   std_logic_vector(10 downto 0)
                 );
@@ -147,10 +144,7 @@ begin
                     SIG_RAM_FR_VALUE
                     );
     VOLUME : volume_manager
-        Port Map (  CLK100MHZ,
-                    RESET_BARRE,
-                    SIG_CE44100,
-                    sound_level,
+        Port Map (  sound_level,
                     SIG_RAM_FR_VALUE,
                     SIG_VOL_FR_VALUE
                     );
