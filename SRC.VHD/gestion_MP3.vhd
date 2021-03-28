@@ -143,143 +143,143 @@ architecture Behavioral of gestion_MP3 is
     end component;
     
     signal RESET_BARRE      : STD_LOGIC;
-    signal B_UP             : STD_LOGIC;
-    signal B_DOWN           : STD_LOGIC;
-    signal B_LEFT           : STD_LOGIC;
-    signal B_RIGHT          : STD_LOGIC;
-    signal B_CENTER         : STD_LOGIC;
-    signal CE_AFFICHAGE     : STD_LOGIC;
-    signal CE_PERCEPTION    : STD_LOGIC;
-    signal FORWARD          : STD_LOGIC;
-    signal PLAY_PAUSE       : STD_LOGIC;
-    signal RESTART          : STD_LOGIC;
-    signal VOLUME_UP        : STD_LOGIC;
-    signal VOLUME_DOWN      : STD_LOGIC;
-    signal NB_SON           : STD_LOGIC_VECTOR(3 downto 0);
-    signal NB_TIME          : STD_LOGIC_VECTOR(9 downto 0);
-    signal COMMANDE         : STD_LOGIC_VECTOR(2 downto 0);
-    signal E0               : STD_LOGIC_VECTOR(6 downto 0);
-    signal E1               : STD_LOGIC_VECTOR(6 downto 0);
-    signal E2               : STD_LOGIC_VECTOR(6 downto 0);
-    signal E3               : STD_LOGIC_VECTOR(6 downto 0);
-    signal E4               : STD_LOGIC_VECTOR(6 downto 0);
-    signal E5               : STD_LOGIC_VECTOR(6 downto 0);
-    signal E6               : STD_LOGIC_VECTOR(6 downto 0);
-    signal E7               : STD_LOGIC_VECTOR(6 downto 0);
+    signal SIG_B_UP             : STD_LOGIC;
+    signal SIG_B_DOWN           : STD_LOGIC;
+    signal SIG_B_LEFT           : STD_LOGIC;
+    signal SIG_B_RIGHT          : STD_LOGIC;
+    signal SIG_B_CENTER         : STD_LOGIC;
+    signal SIG_CE_AFFICHAGE     : STD_LOGIC;
+    signal SIG_CE_PERCEPTION    : STD_LOGIC;
+    signal SIG_FORWARD          : STD_LOGIC;
+    signal SIG_PLAY_PAUSE       : STD_LOGIC;
+    signal SIG_RESTART          : STD_LOGIC;
+    signal SIG_VOLUME_UP        : STD_LOGIC;
+    signal SIG_VOLUME_DOWN      : STD_LOGIC;
+    signal SIG_NB_SON           : STD_LOGIC_VECTOR(3 downto 0);
+    signal SIG_NB_TIME          : STD_LOGIC_VECTOR(9 downto 0);
+    signal SIG_COMMANDE         : STD_LOGIC_VECTOR(2 downto 0);
+    signal SIG_E0               : STD_LOGIC_VECTOR(6 downto 0);
+    signal SIG_E1               : STD_LOGIC_VECTOR(6 downto 0);
+    signal SIG_E2               : STD_LOGIC_VECTOR(6 downto 0);
+    signal SIG_E3               : STD_LOGIC_VECTOR(6 downto 0);
+    signal SIG_E4               : STD_LOGIC_VECTOR(6 downto 0);
+    signal SIG_E5               : STD_LOGIC_VECTOR(6 downto 0);
+    signal SIG_E6               : STD_LOGIC_VECTOR(6 downto 0);
+    signal SIG_E7               : STD_LOGIC_VECTOR(6 downto 0);
     
 begin
 
     RESET_BARRE <= not(reset);
-    Sound_level <= NB_SON;
-    Init_add    <= RESTART;
-    Start_add   <= PLAY_PAUSE;
-    Forward_add <= FORWARD;
+    Sound_level <= SIG_NB_SON;
+    Init_add    <= SIG_RESTART;
+    Start_add   <= SIG_PLAY_PAUSE;
+    Forward_add <= SIG_FORWARD;
             
     REG_B_CENTER : detect_impulsion 
         PORT MAP (  CLK100MHZ,
                     BTNC,
-                    B_CENTER
+                    SIG_B_CENTER
                     );
 
     REG_B_DOWN : detect_impulsion 
         PORT MAP (  CLK100MHZ,
                     BTND,
-                    B_DOWN
+                    SIG_B_DOWN
                     );
                     
     REG_B_LEFT : detect_impulsion 
         PORT MAP (  CLK100MHZ,
                     BTNL,
-                    B_LEFT
+                    SIG_B_LEFT
                     );
                     
     REG_B_RIGHT : detect_impulsion 
         PORT MAP (  CLK100MHZ,
                     BTNR,
-                    B_RIGHT
+                    SIG_B_RIGHT
                     );
                     
     REG_B_UP : detect_impulsion 
         PORT MAP (  CLK100MHZ,
                     BTNU,
-                    B_UP
+                    SIG_B_UP
                     );
 
     FSM : fsm_MP3
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
-                    B_UP,
-                    B_DOWN,
-                    B_CENTER,
-                    B_LEFT,
-                    B_RIGHT,
-                    PLAY_PAUSE,
-                    RESTART,
-                    FORWARD,
-                    VOLUME_UP,
-                    VOLUME_DOWN
+                    SIG_B_UP,
+                    SIG_B_DOWN,
+                    SIG_B_CENTER,
+                    SIG_B_LEFT,
+                    SIG_B_RIGHT,
+                    SIG_PLAY_PAUSE,
+                    SIG_RESTART,
+                    SIG_FORWARD,
+                    SIG_VOLUME_UP,
+                    SIG_VOLUME_DOWN
                     );
                     
     GESTION_F : gestion_freq
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
-                    CE_AFFICHAGE,
-                    CE_PERCEPTION
+                    SIG_CE_AFFICHAGE,
+                    SIG_CE_PERCEPTION
                     );
 
     GESTION_SON : cpt_1_9
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
-                    RESTART,
-                    VOLUME_UP,
-                    VOLUME_DOWN,
-                    NB_SON
+                    SIG_RESTART,
+                    SIG_VOLUME_UP,
+                    SIG_VOLUME_DOWN,
+                    SIG_NB_SON
                     );
 
     GESTION_TEMP : cpt_1_599
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
-                    CE_AFFICHAGE,
-                    RESTART,
-                    PLAY_PAUSE,
-                    FORWARD,
-                    NB_TIME
+                    SIG_CE_AFFICHAGE,
+                    SIG_RESTART,
+                    SIG_PLAY_PAUSE,
+                    SIG_FORWARD,
+                    SIG_NB_TIME
                     );
                     
     TRANSCOD : transcodeur
-        PORT MAP (  PLAY_PAUSE,
-                    RESTART,
-                    FORWARD,
-                    NB_SON,
-                    NB_TIME,
-                    E0,
-                    E1,
-                    E2,
-                    E3,
-                    E4,
-                    E5,
-                    E6,
-                    E7
+        PORT MAP (  SIG_PLAY_PAUSE,
+                    SIG_RESTART,
+                    SIG_FORWARD,
+                    SIG_NB_SON,
+                    SIG_NB_TIME,
+                    SIG_E0,
+                    SIG_E1,
+                    SIG_E2,
+                    SIG_E3,
+                    SIG_E4,
+                    SIG_E5,
+                    SIG_E6,
+                    SIG_E7
                     );
 
     SELECT_7_SEGMENT : mod8
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
-                    CE_PERCEPTION,
+                    SIG_CE_PERCEPTION,
                     AN,
-                    COMMANDE
+                    SIG_COMMANDE
                     );
 
     MULTIPLEX : mux8
-        PORT MAP (  COMMANDE,
-                    E0,
-                    E1,
-                    E2,
-                    E3,
-                    E4,
-                    E5,
-                    E6,
-                    E7,
+        PORT MAP (  SIG_COMMANDE,
+                    SIG_E0,
+                    SIG_E1,
+                    SIG_E2,
+                    SIG_E3,
+                    SIG_E4,
+                    SIG_E5,
+                    SIG_E6,
+                    SIG_E7,
                     Sevenseg
                     );
                     

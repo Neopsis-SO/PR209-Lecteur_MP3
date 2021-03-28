@@ -93,14 +93,14 @@ architecture Behavioral of MP3 is
                 );  
     end component;
     
-    signal RESET_BARRE  : std_logic; --signal a n'utiliser que sur les full_uart_recv
-    signal RW           : std_logic;
-    signal INIT         : std_logic;
-    signal START        : std_logic;
-    signal FORWARD      : std_logic;
-    signal DATA_TO_SAVE : std_logic_vector (15 downto 0);
-    signal ADDR_TO_SAVE : std_logic_vector (17 downto 0);
-    signal SOUND_LEVEL  : std_logic_vector (3 downto 0);
+    signal RESET_BARRE      : std_logic; --signal a n'utiliser que sur le full_uart_recv
+    signal SIG_RW           : std_logic;
+    signal SIG_INIT         : std_logic;
+    signal SIG_START        : std_logic;
+    signal SIG_FORWARD      : std_logic;
+    signal SIG_DATA_TO_SAVE : std_logic_vector (15 downto 0);
+    signal SIG_ADDR_TO_SAVE : std_logic_vector (17 downto 0);
+    signal SIG_SOUND_LEVEL  : std_logic_vector (3 downto 0);
     
 begin
     RESET_BARRE <= not(reset); 
@@ -115,23 +115,23 @@ begin
                     BTNC,
                     Sevenseg,
                     AN,
-                    SOUND_LEVEL,
-                    INIT,
-                    START,
-                    FORWARD
+                    SIG_SOUND_LEVEL,
+                    SIG_INIT,
+                    SIG_START,
+                    SIG_FORWARD
                     );
                     
     ENCHANTILLONS : gestion_echantillon
         Port Map (  CLK100MHZ,
                     reset,
-                    RW,
-                    INIT,
-                    START,
-                    FORWARD,
-                    SOUND_LEVEL,
+                    SIG_RW,
+                    SIG_INIT,
+                    SIG_START,
+                    SIG_FORWARD,
+                    SIG_SOUND_LEVEL,
                     SW,
-                    ADDR_TO_SAVE,
-                    DATA_TO_SAVE,
+                    SIG_ADDR_TO_SAVE,
+                    SIG_DATA_TO_SAVE,
                     AUD_PWM,
                     AUD_SD
                     );
@@ -141,9 +141,9 @@ begin
                 CLK100MHZ,
                 RESET_BARRE,
                 UART_TXD_IN,
-                ADDR_TO_SAVE,
-                DATA_TO_SAVE,
-                RW
+                SIG_ADDR_TO_SAVE,
+                SIG_DATA_TO_SAVE,
+                SIG_RW
                 );
     
 end Behavioral;

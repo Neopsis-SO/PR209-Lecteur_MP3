@@ -107,12 +107,12 @@ architecture Behavioral of gestion_echantillon is
                 );
     end component;
     
-    signal RESET_BARRE      : std_logic;
-    signal CE44100          : std_logic;
-    signal ADDRESS_R        : std_logic_vector(17 downto 0);
-    signal RAM_FR_VALUE     : std_logic_vector(10 downto 0);
-    signal VOL_FR_VALUE     : std_logic_vector(10 downto 0);
-    signal SPEED_FR_VALUE   : std_logic_vector(12 downto 0);
+    signal RESET_BARRE          : std_logic;
+    signal SIG_CE44100          : std_logic;
+    signal SIG_ADDRESS_R        : std_logic_vector(17 downto 0);
+    signal SIG_RAM_FR_VALUE     : std_logic_vector(10 downto 0);
+    signal SIG_VOL_FR_VALUE     : std_logic_vector(10 downto 0);
+    signal SIG_SPEED_FR_VALUE   : std_logic_vector(12 downto 0);
     signal SIG_NB_PERIODE   : std_logic_vector(13 downto 0);
     
 begin
@@ -123,19 +123,19 @@ begin
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
                     switch,
-                    CE44100,
+                    SIG_CE44100,
                     SIG_NB_PERIODE
                     );
     
     COMPTEUR_D_ADRESSE : cpt_18bits
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
-                    CE44100,
+                    SIG_CE44100,
                     init,
                     start,
                     forward,
                     addr_from_uart,
-                    ADDRESS_R
+                    SIG_ADDRESS_R
                     );
         
     RAM : wav_ram
@@ -143,29 +143,29 @@ begin
                     r_w,
                     addr_from_uart,
                     data_from_uart(10 downto 0),
-                    ADDRESS_R,
-                    RAM_FR_VALUE
+                    SIG_ADDRESS_R,
+                    SIG_RAM_FR_VALUE
                     );
     VOLUME : volume_manager
         Port Map (  CLK100MHZ,
                     RESET_BARRE,
-                    CE44100,
+                    SIG_CE44100,
                     sound_level,
-                    RAM_FR_VALUE,
-                    VOL_FR_VALUE
+                    SIG_RAM_FR_VALUE,
+                    SIG_VOL_FR_VALUE
                     );
             
     SPEED : speed_manager
         Port Map (  switch,
-                    VOL_FR_VALUE,
-                    SPEED_FR_VALUE
+                    SIG_VOL_FR_VALUE,
+                    SIG_SPEED_FR_VALUE
                     );
                     
     Module_PWM : PWM
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
-                    CE44100,
-                    SPEED_FR_VALUE,
+                    SIG_CE44100,
+                    SIG_SPEED_FR_VALUE,
                     SIG_NB_PERIODE,
                     AUD_PWM,
                     AUD_SD
