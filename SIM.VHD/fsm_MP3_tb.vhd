@@ -68,7 +68,7 @@ begin
     b_center    <= '1';
     b_left      <= '1';
     b_right     <= '1';
-    wait for 4*clock_period;
+    wait for 2*clock_period;
     
     reset       <= '1';
     b_up        <= '0';
@@ -76,7 +76,7 @@ begin
     b_center    <= '0';
     b_left      <= '0';
     b_right     <= '0';
-    wait for 4*clock_period;
+    wait for 2*clock_period;
     
     reset       <= '0';
     b_up        <= '0';
@@ -84,7 +84,7 @@ begin
     b_center    <= '0';
     b_left      <= '0';
     b_right     <= '0';
-    wait for 4*clock_period;
+    wait for 2*clock_period;
     
     b_up        <= '1';
     b_down      <= '0'; 

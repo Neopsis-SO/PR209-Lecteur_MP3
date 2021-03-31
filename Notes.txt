@@ -1,0 +1,6 @@
+Chaque échantillon exploite 2247 cycle sachant qu'on a 1 échantillon tous les avec des échantillons allant de 0 à 22...
+
+Simulation FSM, transcodeur
+
+Autres blocs significatifs
+
