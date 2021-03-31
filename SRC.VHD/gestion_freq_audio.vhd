@@ -34,39 +34,39 @@ use IEEE.NUMERIC_STD.ALL;
 entity gestion_freq_audio is
     Port (  clk             : in    std_logic;
             reset           : in    std_logic;
-            multiplicateur  : in    std_logic_vector(2 downto 0);
+            multiplicateur  : in    std_logic_vector(1 downto 0);
             cePWM           : out   std_logic;  -- Frequence multiple de 44100Hz
-            nbPeriode       : out   std_logic_vector(13 downto 0)
+            nbPeriode       : out   std_logic_vector(12 downto 0)
             );
 end gestion_freq_audio;
 
 architecture Behavioral of gestion_freq_audio is
     constant    CONST_44100          : unsigned  (11 DOWNTO 0) := to_unsigned(2266,12);
-    signal      SIG_cePWM_couter     : unsigned  (13 DOWNTO 0);  -- 2^12 = 4 096 / 2^14 = 16 384 pour (2 266*4)
-    signal      SIG_counterMax       : unsigned  (13 DOWNTO 0);
+    signal      SIG_cePWM_couter     : unsigned  (12 DOWNTO 0);  -- 2^12 = 4 096 / 2^13 = 8 192 pour (2 266*2)
+    signal      SIG_counterMax       : unsigned  (12 DOWNTO 0);
     signal      SIG_operateur        : std_logic;    --SIG = 1 -> VITESSE REDUITE / SIG = 0 -> VITESSE AUGMENTER
-    signal      SIG_multiplicateur   : std_logic_vector (1 downto 0);
+    signal      SIG_multiplicateur   : std_logic;
 
 begin
 
-    SIG_operateur       <= multiplicateur(2);
-    SIG_multiplicateur  <= multiplicateur (1 downto 0);
+    SIG_operateur       <= multiplicateur(1);
+    SIG_multiplicateur  <= multiplicateur(0);
     nbPeriode           <= std_logic_vector(SIG_counterMax);
     
     process (SIG_operateur, SIG_multiplicateur)
     begin
         if (SIG_operateur = '0') then
-            case SIG_multiplicateur is
-                when "01"   => SIG_counterMax <= to_unsigned(0, 3) & CONST_44100(11 downto 1);
-                when "10"   => SIG_counterMax <= to_unsigned(0, 4) & CONST_44100(11 downto 2);
-                when OTHERS => SIG_counterMax <= to_unsigned(0, 2) & CONST_44100(11 downto 0);
-            end case;
+            if (SIG_multiplicateur = '1') then
+                SIG_counterMax <= to_unsigned(0, 2) & CONST_44100(11 downto 1);
+            else
+                SIG_counterMax <= to_unsigned(0, 1) & CONST_44100(11 downto 0);
+            end if;
         else
-            case SIG_multiplicateur is
-                when "01"   => SIG_counterMax <= to_unsigned(0, 1) & CONST_44100(11 downto 0) & to_unsigned(0, 1);
-                when "10"   => SIG_counterMax <= CONST_44100(11 downto 0) & to_unsigned(0, 2);
-                when OTHERS => SIG_counterMax <= to_unsigned(0, 2) & CONST_44100(11 downto 0);
-            end case;
+            if (SIG_multiplicateur = '1') then
+                SIG_counterMax <= CONST_44100(11 downto 0) & to_unsigned(0, 1);
+            else
+                SIG_counterMax <= to_unsigned(0, 1) & CONST_44100(11 downto 0);
+            end if;
         end if;  
     end process;
     
@@ -81,8 +81,8 @@ begin
                 SIG_cePWM_couter  <= (OTHERS=> '0');
                 cePWM       <= '1';
             else
-                SIG_cePWM_couter  <= SIG_cePWM_couter + 1;
-                cePWM       <= '0';
+                SIG_cePWM_couter    <= SIG_cePWM_couter + 1;
+                cePWM               <= '0';
             end if;
         end if;
     end process;

@@ -39,7 +39,7 @@ entity MP3 is
             BTNL            : in    std_logic;  --Bouton gauche
             BTNR            : in    std_logic;  --Bouton droite
             BTNC            : in    std_logic;  --Bouton centre
-            SW              : in    std_logic_vector(2 downto 0);
+            SW              : in    std_logic_vector(1 downto 0);
             UART_TXD_IN     : in    std_logic;
             Sevenseg        : out   std_logic_vector(7 downto 0);
             AN              : out   std_logic_vector(7 downto 0);
@@ -74,7 +74,7 @@ architecture Behavioral of MP3 is
                 start           : in    std_logic;
                 forward         : in    std_logic;
                 sound_level     : in    std_logic_vector(3 downto 0);
-                switch          : in    std_logic_vector(2 downto 0);
+                switch          : in    std_logic_vector(1 downto 0);
                 addr_from_uart  : in    std_logic_vector(17 downto 0);
                 data_from_uart  : in    std_logic_vector(15 downto 0);
                 AUD_PWM         : out   std_logic;

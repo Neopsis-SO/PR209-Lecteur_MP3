@@ -35,22 +35,22 @@ entity PWM is
     Port (  clk         : in    std_logic;
             reset       : in    std_logic;
             ce          : in    std_logic;
-            idata_n     : in    std_logic_vector(12 downto 0);
-            nbPeriode   : in    std_logic_vector(13 downto 0);
+            idata_n     : in    std_logic_vector(11 downto 0);
+            nbPeriode   : in    std_logic_vector(12 downto 0);
             odata       : out   std_logic;
             enable      : out   std_logic
             );
 end PWM;
 
 architecture Behavioral of PWM is
-    signal      sig_data    : unsigned(13 downto 0);
-    signal      val_data    : unsigned(13 downto 0);
-    signal      counter     : unsigned(13 downto 0);
+    signal      sig_data    : unsigned(12 downto 0);
+    signal      val_data    : unsigned(12 downto 0);
+    signal      counter     : unsigned(12 downto 0);
     
 begin
 
     enable      <= '1'; -- Permet d'activer la sortie audio
-    sig_data    <= unsigned(signed(idata_n) + to_signed(1024,14));
+    sig_data    <= unsigned(signed(idata_n) + to_signed(1024,13));
     
     compteur : process(clk, reset)
     begin
@@ -69,7 +69,7 @@ begin
     registre : process(clk, reset)
     begin
         if (reset = '1') then
-            val_data <= to_unsigned(0, 14);
+            val_data <= to_unsigned(0, 13);
         elsif (clk'event and clk = '1') then
             if (ce = '1') then
                 val_data <= sig_data;

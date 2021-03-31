@@ -39,7 +39,7 @@ entity gestion_echantillon is
             start           : in    std_logic;
             forward         : in    std_logic;
             sound_level     : in    std_logic_vector(3 downto 0);
-            switch          : in    std_logic_vector(2 downto 0);
+            switch          : in    std_logic_vector(1 downto 0);
             addr_from_uart  : in    std_logic_vector(17 downto 0);
             data_from_uart  : in    std_logic_vector(15 downto 0);
             AUD_PWM         : out   std_logic;
@@ -51,9 +51,9 @@ architecture Behavioral of gestion_echantillon is
     component gestion_freq_audio
         Port (  clk             : in    std_logic;
                 reset           : in    std_logic;
-                multiplicateur  : in    std_logic_vector(2 downto 0);
+                multiplicateur  : in    std_logic_vector(1 downto 0);
                 cePWM           : out   std_logic;  -- Frequence multiple de 44100Hz
-                nbPeriode       : out   std_logic_vector(13 downto 0)
+                nbPeriode       : out   std_logic_vector(12 downto 0)
                 );
     end component;
     
@@ -87,9 +87,9 @@ architecture Behavioral of gestion_echantillon is
     end component;
     
     component speed_manager
-        Port (  multiplicateur  : in    std_logic_vector(2 downto 0);
+        Port (  multiplicateur  : in    std_logic_vector(1 downto 0);
                 idata           : in    std_logic_vector(10 downto 0);
-                odata           : out   std_logic_vector(12 downto 0)
+                odata           : out   std_logic_vector(11 downto 0)
                 );
     end component;
     
@@ -97,8 +97,8 @@ architecture Behavioral of gestion_echantillon is
         Port (  clk         : in    std_logic;
                 reset       : in    std_logic;
                 ce          : in    std_logic;
-                idata_n     : in    std_logic_vector(12 downto 0);
-                nbPeriode   : in    std_logic_vector(13 downto 0);
+                idata_n     : in    std_logic_vector(11 downto 0);
+                nbPeriode   : in    std_logic_vector(12 downto 0);
                 odata       : out   std_logic;
                 enable      : out   std_logic
                 );
@@ -109,8 +109,8 @@ architecture Behavioral of gestion_echantillon is
     signal SIG_ADDRESS_R        : std_logic_vector(17 downto 0);
     signal SIG_RAM_FR_VALUE     : std_logic_vector(10 downto 0);
     signal SIG_VOL_FR_VALUE     : std_logic_vector(10 downto 0);
-    signal SIG_SPEED_FR_VALUE   : std_logic_vector(12 downto 0);
-    signal SIG_NB_PERIODE   : std_logic_vector(13 downto 0);
+    signal SIG_SPEED_FR_VALUE   : std_logic_vector(11 downto 0);
+    signal SIG_NB_PERIODE       : std_logic_vector(12 downto 0);
     
 begin
 
@@ -150,7 +150,7 @@ begin
                     );
             
     SPEED : speed_manager
-        Port Map (  switch,
+        Port Map (  switch (1 downto 0),
                     SIG_VOL_FR_VALUE,
                     SIG_SPEED_FR_VALUE
                     );
