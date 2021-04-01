@@ -14,15 +14,17 @@ architecture bench of gestion_freq_audio_tb is
   component gestion_freq_audio
       Port (  clk             : in    std_logic;
               reset           : in    std_logic;
-              multiplicateur  : in    std_logic_vector(2 downto 0);
-              cePWM           : out   std_logic
+              multiplicateur  : in    std_logic_vector(1 downto 0);
+              cePWM           : out   std_logic;
+              nbPeriode       : out   std_logic_vector(12 downto 0)
               );
   end component;
 
   signal clk: std_logic;
   signal reset: std_logic;
-  signal multiplicateur: std_logic_vector(2 downto 0);
+  signal multiplicateur: std_logic_vector(1 downto 0);
   signal cePWM: std_logic ;
+  signal nbPeriode: std_logic_vector(12 downto 0);
 
   constant clock_period: time := 10 ns;
   signal stop_the_clock: boolean;
@@ -32,41 +34,30 @@ begin
   uut: gestion_freq_audio port map ( clk            => clk,
                                      reset          => reset,
                                      multiplicateur => multiplicateur,
-                                     cePWM          => cePWM );
+                                     cePWM          => cePWM,
+                                     nbPeriode      => nbPeriode );
 
   stimulus: process
   begin
     reset <= '1';
-    multiplicateur <= "000";
+    multiplicateur <= "00";
     
     wait for 1 us;
 
     -- Put test bench stimulus code here
     reset <= '0';
-    multiplicateur <= "000";
+    multiplicateur <= "00";
     wait for 100 us;
     
-    multiplicateur <= "001";
+    multiplicateur <= "01";
     wait for 100 us;
     
-    multiplicateur <= "010";
+    multiplicateur <= "10";
     wait for 100 us;
     
-    multiplicateur <= "011";
+    multiplicateur <= "11";
     wait for 100 us;
     
-    multiplicateur <= "100";
-    wait for 100 us;
-    
-    multiplicateur <= "101";
-    wait for 100 us;
-    
-    multiplicateur <= "110";
-    wait for 100 us;
-    
-    multiplicateur <= "111";
-    wait for 100 us;
-
     stop_the_clock <= true;
     wait;
   end process;

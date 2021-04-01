@@ -117,7 +117,7 @@ begin
 
     RESET_BARRE <= not(reset);
     
-    BASE_DE_TEMPS_44100Hz : gestion_freq_audio
+    BASE_DE_TEMPS : gestion_freq_audio
         PORT MAP (  CLK100MHZ,
                     RESET_BARRE,
                     switch,
