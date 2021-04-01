@@ -32,25 +32,49 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity PWM is
-    Port (  clk         : in    std_logic;
-            reset       : in    std_logic;
-            ce          : in    std_logic;
-            idata_n     : in    std_logic_vector(11 downto 0);
-            nbPeriode   : in    std_logic_vector(12 downto 0);
-            odata       : out   std_logic;
-            enable      : out   std_logic
+    Port (  clk             : in    std_logic;
+            reset           : in    std_logic;
+            ce              : in    std_logic;
+            idata_n         : in    std_logic_vector(11 downto 0);
+            multiplicateur  : in    std_logic_vector(1 downto 0);
+            nbPeriode       : in    std_logic_vector(12 downto 0);
+            odata           : out   std_logic;
+            enable          : out   std_logic
             );
 end PWM;
 
 architecture Behavioral of PWM is
+    constant    CONST_1024          : signed(11 downto 0) := to_signed(1024, 12);
+    signal      SIG_operateur       : std_logic;    --SIG = 1 -> VITESSE REDUITE / SIG = 0 -> VITESSE AUGMENTER
+    signal      SIG_multiplicateur  : std_logic;
+    signal      SIG_CORRECTION      : signed(12 downto 0) := '0' & CONST_1024;
     signal      sig_data    : unsigned(12 downto 0);
     signal      val_data    : unsigned(12 downto 0);
     signal      counter     : unsigned(12 downto 0);
     
 begin
-
     enable      <= '1'; -- Permet d'activer la sortie audio
-    sig_data    <= unsigned(signed(idata_n) + to_signed(1024,13));
+    SIG_operateur       <= multiplicateur(1);
+    SIG_multiplicateur  <= multiplicateur(0);
+    
+    correction : process (SIG_operateur, SIG_multiplicateur)
+    begin
+        if (SIG_operateur = '0') then
+            if (SIG_multiplicateur = '1') then
+                SIG_CORRECTION <= '0' & '0' & CONST_1024(11 downto 1);
+            else                
+                SIG_CORRECTION <= '0' & CONST_1024;
+            end if;
+        else
+            if (SIG_multiplicateur = '1') then
+                SIG_CORRECTION <= CONST_1024 & '0';
+            else
+                SIG_CORRECTION <= '0' & CONST_1024;
+            end if;
+        end if;  
+    end process;
+    
+    sig_data    <= unsigned(signed(idata_n) + SIG_CORRECTION);
     
     compteur : process(clk, reset)
     begin

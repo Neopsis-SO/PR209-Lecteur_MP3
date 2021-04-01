@@ -94,13 +94,14 @@ architecture Behavioral of gestion_echantillon is
     end component;
     
     component PWM
-        Port (  clk         : in    std_logic;
-                reset       : in    std_logic;
-                ce          : in    std_logic;
-                idata_n     : in    std_logic_vector(11 downto 0);
-                nbPeriode   : in    std_logic_vector(12 downto 0);
-                odata       : out   std_logic;
-                enable      : out   std_logic
+        Port (  clk             : in    std_logic;
+                reset           : in    std_logic;
+                ce              : in    std_logic;
+                idata_n         : in    std_logic_vector(11 downto 0);
+                multiplicateur  : in    std_logic_vector(1 downto 0);
+                nbPeriode       : in    std_logic_vector(12 downto 0);
+                odata           : out   std_logic;
+                enable          : out   std_logic
                 );
     end component;
     
@@ -160,6 +161,7 @@ begin
                     RESET_BARRE,
                     SIG_CE44100,
                     SIG_SPEED_FR_VALUE,
+                    switch,
                     SIG_NB_PERIODE,
                     AUD_PWM,
                     AUD_SD

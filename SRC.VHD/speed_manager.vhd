@@ -56,7 +56,7 @@ begin
             end if;
         else
             if (SIG_multiplicateur = '1') then
-                odata <= idata(10 downto 0)& idata(10);
+                odata <= idata(10 downto 0) & idata(10);
             else
                 odata <= idata(10)& idata(10 downto 0);
             end if;
