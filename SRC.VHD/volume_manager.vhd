@@ -54,6 +54,6 @@ begin
         idata(10)&idata(10)& idata(10 downto 2)  when "0111",
         idata(10)& idata(10 downto 1)    when "1000",
         idata   when "1001",
-        idata(10 downto 4)&idata(10)&idata(10)&idata(10)&idata(10)  when OTHERS;
+        idata(10)&idata(10)&idata(10)&idata(10)& idata(10 downto 4)  when OTHERS;
     
 end Behavioral;
